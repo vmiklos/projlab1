@@ -71,12 +71,10 @@ Jelenleg elérhetõ, nem VIATRA-n mûködõ algoritmusok feltérképezése:
 \frametitle{Megoldott feladatok}
 \framesubtitle{VIATRA-alapú megoldás elkészítése}
 \begin{itemize}
-
 \item A diffxml által használt FMES algoritmus átültetése VIATRA-ra
 \item Az algoritmus egy eleme az a döntéshozás, mely eldönti, hogy két elem ugyanaz-e különbözõ modellekben
 \item Itt figyelembe lehetne venni az XML sémát, jelenleg ez nincs így
 \item Az algoritmus a modellben beszúrásokat, áthelyezéseket, törléseket detektál
-
 \end{itemize}
 \end{frame}
 
@@ -140,31 +138,34 @@ Más úton elérhetõ elemek párosítása
 \item A gyûjtemény elemei XML fájlok, ehhez kell egy VIATRA importer
 \item Importer séma nélküli XML-ekhez
 \end{itemize}
-
 \end{frame}
 
 \begin{frame}
 \frametitle{Tesztelési környezet}
 \begin{itemize}
-
 \item Eclipse 3.5
 \item VIATRA2 SVN (r1334)
 \item diffxml 0.95B
 \item Kézi tesztelés (runtime eclipse, importálás, model comparator futtatása)
-
 \end{itemize}
 \end{frame}
+
 \begin{frame}
-
 \frametitle{Jövõbeli lehetõségek}
-
 \begin{itemize}
 \item XML importer: Séma megkövetelése, így a VIATRA-beli entitásokhoz típusok lennének rendelhetõek
 \item Csak a comparator került megvalósításra, ennek kimenete alapján egy modell merge-ölõ eszközt is lehetne készíteni
 \item A két entitást összehasonlító elem finomítható lenne
 \item Az FMES fákon dolgozik, egyéb gráf-összehasonlító algoritmusok is elérhetõek (pl. Groove-ból)
-
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kérdések}
+\begin{figure}[H]
+\centering
+\includegraphics[width=50mm,keepaspectratio]{kerdesek.eps}
+\end{figure}
 \end{frame}
 
 \end{document}
