@@ -5,7 +5,7 @@
 
 \usetheme{Warsaw}
 \setbeamertemplate{headline}{}
-\setbeamertemplate{footline}{}
+\setbeamertemplate{footline}[page number]
 \setbeamersize{text margin left=0.5cm}
   
 \usepackage[magyar, english]{babel}
@@ -36,96 +36,109 @@
 
 \begin{frame}
 \frametitle{Feladat leírása}
-%\begin{figure}[H]
-%\includegraphics[width=33mm,keepaspectratio]{erlang.eps}
-%\end{figure}
 \begin{itemize}
-\item Ilyen rendszerek építésére különféle keretrendszereket használnak
-\item Megvizsgálni, hogy az Erlang nyelv és környezet alkalmas-e ilyen célra
-\item Az alkalmasság kiválóan bizonyítható egy Erlang-alapú rendszer
-tervezésével
+\item Megismerkedni a modellek összehasonlításának és merge-ölésének nehézségeivel
+\item Tanulmányozni a probléma megoldásához használható algoritmusokat
+\item Egy konkrét algoritmust portolni / implementálni a VIATRA2 rendszerben
+\item Tesztelhetõséget lehetõvé tenni
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Motiváció}
+\begin{figure}[H]
+\includegraphics[width=47mm,keepaspectratio]{motivacio2.eps}
+\end{figure}
 \begin{itemize}
-\item Az életviteli rendszereknél a keretrendszerrel szemben követelmény az elosztottság, hibatûrés és a párhuzamosság magasfokú támogatása
-\item Az Erlang nyelvet eredetileg telefonközpontok programozására fejlesztették ki, ahol ugyanezek a tulajdonságok jellemzõek
+\item Ericsson: a gyakorlatban használható modell merge-re szükség van
+\item Jelenleg a legtöbb esetben a modellek merge-ölése kézzel történik (merge szoba)
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Megoldott feladatok}
-\framesubtitle{Kapcsolódó elérhetõ rendszerek bemutatása}
+\framesubtitle{A probléma megoldásához használható algoritmusok tanulmányozása}
+Jelenleg elérhetõ, nem VIATRA-n mûködõ algoritmusok feltérképezése:
 \begin{itemize}
-\item Jelenleg elérhetõ életviteli rendszerek feltérképezése:
-\item Tunstall, Everon, Telcomed, stb.
-\item Távoli eljáráshívást segítõ keretrendszerek áttekintése
-\item RPC, DCOM, CORBA, XML-RPC, OSGi
-\item Egy-egy rendszer (a Tunstall és az OSGi) részletesebb ismertetése
+\item Gráfok összehasonlítására szolgáló, izomorfiát vizsgáló algoritmusok
+\item UML modelleket összehasonlító eszközök
+\item Fák összehasonlítását megvalósító megoldások
+\item Egy-egy megoldás (Odyssey-VCS, diffxml) részletesebb megismerése
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Megoldott feladatok}
-\framesubtitle{Erlang-alapú rendszer tervezése}
+\framesubtitle{VIATRA-alapú megoldás elkészítése}
 \begin{itemize}
 
-\item Legfontosabb követelmények áttekintése: Elosztottság, dinamizmus
-\item A rendszer elemeinek meghatározása
-\item A rendszer határainak definiálása
-\item UML értelmezése Erlang környezetben
-
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Megoldott feladatok}
-\framesubtitle{Formális tervezés UML használatával}
-%\begin{figure}[H]
-%\includegraphics[width=33mm,keepaspectratio]{uml.eps}
-%\end{figure}
-\begin{itemize}
-
-\item Elemek feladatainak, szolgáltatásainak leírása
-\item Statikus struktúradiagram
-\item Szekvenciadiagramok
+\item A diffxml által használt FMES algoritmus átültetése VIATRA-ra
+\item Az algoritmus egy eleme az a döntéshozás, mely eldönti, hogy két elem ugyanaz-e különbözõ modellekben
+\item Itt figyelembe lehetne venni az XML sémát, jelenleg ez nincs így
+\item Az algoritmus a modellben beszúrásokat, áthelyezéseket, törléseket detektál
 
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Megoldott feladatok}
-\framesubtitle{Erlang-alapú rendszer tervezése}
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=100mm,keepaspectratio]{statikus-struktura-diagram.eps}
-%
-%A rendszer statikus struktúradiagramja
-%\end{figure}
+\framesubtitle{A Fast Match / Edit Script algoritmus mûködése (egyszerûsített)}
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes2.eps}
+
+Megkeressük a fa leveleit
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes3.eps}
+
+Az azonos úton elérhetõek közül összekötjük azokat, melyek azonosak
+\end{figure}
 \end{frame}
 
 \begin{frame}
 \frametitle{Megoldott feladatok}
-\framesubtitle{Erlang-alapú rendszer tervezése}
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=50mm,keepaspectratio]{uzenetkuldes-szenzorrol.eps}
-%
-%Szekvenciadiagram: üzenetküldés szenzorról
-%\end{figure}
+\framesubtitle{A Fast Match / Edit Script algoritmus mûködése (egyszerûsített)}
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes4.eps}
+
+A maradék levelek közül összekötjük azokat, melyek nem azonos úton érhetõek el, de azonosak
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes5.eps}
+
+Iteratívan ismételjük a fa gyökeréig az elõzõ 3 mûveletet: levelek keresése
+\end{figure}
 \end{frame}
 
 \begin{frame}
 \frametitle{Megoldott feladatok}
-\framesubtitle{Megvalósítás}
+\framesubtitle{A Fast Match / Edit Script algoritmus mûködése (egyszerûsített)}
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes6.eps}
+
+Azonos úton elérhetõ elemek párosítása
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes7.eps}
+
+Más úton elérhetõ elemek párosítása
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Megoldott feladatok}
+\framesubtitle{XML importer}
 \begin{itemize}
-\item Elsõ változat (szenzor-központ-terminál)
-\item Redundancia támogatása
-\item Eszközmeghajtók
-\item Felhasználói felület
-\item Hibatûrés
+\item Az FMES teszteléséhez szükség volt teszt modellekre
+\item A diffxml projekt már rendelkezett egy ilyen tesztgyûjteménnyel
+\item A gyûjtemény elemei XML fájlok, ehhez kell egy VIATRA importer
+\item Importer séma nélküli XML-ekhez
 \end{itemize}
 
 \end{frame}
@@ -134,25 +147,22 @@ tervezésével
 \frametitle{Tesztelési környezet}
 \begin{itemize}
 
-\item Linux operációs rendszer
-\item Erlang R12B-5
-\item Helyi hálózat: clevo.local, ibook.local
-\item Tûzfal finomhangolása
-\item Automatizált tesztkörnyezet
-\item Erõforrásigény beágyazott eszközökbe: 16 MB memória, bár SAE-vel
-egészen 0.5 MB-ig el lehet menni
+\item Eclipse 3.5
+\item VIATRA2 SVN (r1334)
+\item diffxml 0.95B
+\item Kézi tesztelés (runtime eclipse, importálás, model comparator futtatása)
 
 \end{itemize}
 \end{frame}
 \begin{frame}
 
 \frametitle{Jövõbeli lehetõségek}
-\begin{itemize}
 
-\item Grafikus felhasználói felület
-\item Dinamikusabb konfiguráció, központok automatikus keresése
-\item Mért adatok adatbázisban való tárolása
-\item Tényleges életviteli eszközök integrálása
+\begin{itemize}
+\item XML importer: Séma megkövetelése, így a VIATRA-beli entitásokhoz típusok lennének rendelhetõek
+\item Csak a comparator került megvalósításra, ennek kimenete alapján egy modell merge-ölõ eszközt is lehetne készíteni
+\item A két entitást összehasonlító elem finomítható lenne
+\item Az FMES fákon dolgozik, egyéb gráf-összehasonlító algoritmusok is elérhetõek (pl. Groove-ból)
 
 \end{itemize}
 \end{frame}
