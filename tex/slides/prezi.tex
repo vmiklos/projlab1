@@ -1,0 +1,163 @@
+\documentclass{beamer}
+\author{Vajna Miklós}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=structure.fg!25]
+
+\usetheme{Warsaw}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{}
+\setbeamersize{text margin left=0.5cm}
+  
+\usepackage[magyar, english]{babel}
+
+\usepackage{times}
+\usepackage[latin2]{inputenc}
+\usepackage[T1]{fontenc}
+
+\begin{document}
+
+\title{Életviteli eszközök elosztott környezetben}
+\date{2010. január 5.}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Bevezetõ}
+\begin{figure}[H]
+\includegraphics[width=17mm,keepaspectratio]{bev.eps}
+\end{figure}
+\begin{itemize}
+\item Életviteli rendszer: infokommunikációs eszközök rendszerbe
+kapcsolása
+\item Digitális vérnyomásmérõ, mérleg, hõmérõ, mobiltelefon,
+aktivitásmérõ
+\item Célja: idõs és/vagy rászoruló emberek segítése
+\item Otthon/munkahelyen minél tovább független, hasznos tagjai
+maradjanak a társadalomnak
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Feladat leírása}
+\begin{figure}[H]
+\includegraphics[width=33mm,keepaspectratio]{erlang.eps}
+\end{figure}
+\begin{itemize}
+\item Ilyen rendszerek építésére különféle keretrendszereket használnak
+\item Megvizsgálni, hogy az Erlang nyelv és környezet alkalmas-e ilyen célra
+\item Az alkalmasság kiválóan bizonyítható egy Erlang-alapú rendszer
+tervezésével
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Motiváció}
+\begin{itemize}
+\item Az életviteli rendszereknél a keretrendszerrel szemben követelmény az elosztottság, hibatûrés és a párhuzamosság magasfokú támogatása
+\item Az Erlang nyelvet eredetileg telefonközpontok programozására fejlesztették ki, ahol ugyanezek a tulajdonságok jellemzõek
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Megoldott feladatok}
+\framesubtitle{Kapcsolódó elérhetõ rendszerek bemutatása}
+\begin{itemize}
+\item Jelenleg elérhetõ életviteli rendszerek feltérképezése:
+\item Tunstall, Everon, Telcomed, stb.
+\item Távoli eljáráshívást segítõ keretrendszerek áttekintése
+\item RPC, DCOM, CORBA, XML-RPC, OSGi
+\item Egy-egy rendszer (a Tunstall és az OSGi) részletesebb ismertetése
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Megoldott feladatok}
+\framesubtitle{Erlang-alapú rendszer tervezése}
+\begin{itemize}
+
+\item Legfontosabb követelmények áttekintése: Elosztottság, dinamizmus
+\item A rendszer elemeinek meghatározása
+\item A rendszer határainak definiálása
+\item UML értelmezése Erlang környezetben
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Megoldott feladatok}
+\framesubtitle{Formális tervezés UML használatával}
+\begin{figure}[H]
+\includegraphics[width=33mm,keepaspectratio]{uml.eps}
+\end{figure}
+\begin{itemize}
+
+\item Elemek feladatainak, szolgáltatásainak leírása
+\item Statikus struktúradiagram
+\item Szekvenciadiagramok
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Megoldott feladatok}
+\framesubtitle{Erlang-alapú rendszer tervezése}
+\begin{figure}[H]
+\centering
+\includegraphics[width=100mm,keepaspectratio]{statikus-struktura-diagram.eps}
+
+A rendszer statikus struktúradiagramja
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Megoldott feladatok}
+\framesubtitle{Erlang-alapú rendszer tervezése}
+\begin{figure}[H]
+\centering
+\includegraphics[width=50mm,keepaspectratio]{uzenetkuldes-szenzorrol.eps}
+
+Szekvenciadiagram: üzenetküldés szenzorról
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Megoldott feladatok}
+\framesubtitle{Megvalósítás}
+\begin{itemize}
+\item Elsõ változat (szenzor-központ-terminál)
+\item Redundancia támogatása
+\item Eszközmeghajtók
+\item Felhasználói felület
+\item Hibatûrés
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Tesztelési környezet}
+\begin{itemize}
+
+\item Linux operációs rendszer
+\item Erlang R12B-5
+\item Helyi hálózat: clevo.local, ibook.local
+\item Tûzfal finomhangolása
+\item Automatizált tesztkörnyezet
+\item Erõforrásigény beágyazott eszközökbe: 16 MB memória, bár SAE-vel
+egészen 0.5 MB-ig el lehet menni
+
+\end{itemize}
+\end{frame}
+\begin{frame}
+
+\frametitle{Jövõbeli lehetõségek}
+\begin{itemize}
+
+\item Grafikus felhasználói felület
+\item Dinamikusabb konfiguráció, központok automatikus keresése
+\item Mért adatok adatbázisban való tárolása
+\item Tényleges életviteli eszközök integrálása
+
+\end{itemize}
+\end{frame}
+
+\end{document}
