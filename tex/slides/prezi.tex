@@ -16,7 +16,7 @@
 
 \begin{document}
 
-\title{Model Merge and Comparison}
+\title{Modellek összehasonlítása és egyesítése}
 \date{2010. május 13.}
 
 \frame{\titlepage}
@@ -28,7 +28,7 @@
 \end{figure}
 \begin{itemize}
 \item A modellvezérelt szoftverfejlesztés egyik ma aktuális kérdése
-\item Forráskódok összehasonlításához és merge-öléséhez már kifinomult eszközök állnak rendelkezésre
+\item Forráskódok összehasonlításához és egyesítéséhez már kifinomult eszközök állnak rendelkezésre
 \item A modellek összehasonlítása sokkal összetettebb feladat
 \item Általános, bármilyen metamodellel mûködõ eszköz jelenleg nem érhetõ el
 \end{itemize}
@@ -37,7 +37,7 @@
 \begin{frame}
 \frametitle{Feladat leírása}
 \begin{itemize}
-\item Megismerkedni a modellek összehasonlításának és merge-ölésének nehézségeivel
+\item Megismerkedni a modellek összehasonlításának és egyesítésének nehézségeivel
 \item Tanulmányozni a probléma megoldásához használható algoritmusokat
 \item Egy konkrét algoritmust portolni / implementálni a VIATRA2 rendszerben
 \item Tesztelhetõséget lehetõvé tenni
@@ -47,11 +47,11 @@
 \begin{frame}
 \frametitle{Motiváció}
 \begin{figure}[H]
-\includegraphics[width=47mm,keepaspectratio]{motivacio2.eps}
+\includegraphics[width=27mm,keepaspectratio]{motivacio2.eps}
 \end{figure}
 \begin{itemize}
-\item Ericsson: a gyakorlatban használható modell merge-re szükség van
-\item Jelenleg a legtöbb esetben a modellek merge-ölése kézzel történik (merge szoba)
+\item Ericsson: a gyakorlatban használható modell egyesítésre szükség van
+\item Jelenleg a legtöbb esetben a modellek egyesítése kézzel történik (merge szoba)
 \end{itemize}
 \end{frame}
 
@@ -154,7 +154,7 @@ Más úton elérhetõ elemek párosítása
 \frametitle{Jövõbeli lehetõségek}
 \begin{itemize}
 \item XML importer: Séma megkövetelése, így a VIATRA-beli entitásokhoz típusok lennének rendelhetõek
-\item Csak a comparator került megvalósításra, ennek kimenete alapján egy modell merge-ölõ eszközt is lehetne készíteni
+\item Csak a comparator került megvalósításra, ennek kimenete alapján egy modell egyesítõ eszközt is lehetne készíteni
 \item A két entitást összehasonlító elem finomítható lenne
 \item Az FMES fákon dolgozik, egyéb gráf-összehasonlító algoritmusok is elérhetõek (pl. Groove-ból)
 \end{itemize}
