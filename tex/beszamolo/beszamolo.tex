@@ -322,7 +322,49 @@ bonyolult, egyszerûen csak végrehajtja a mûveleteket a bemenetrõl. Az érdekes
 rész a diffxml.
 
 A FMES algoritmusnak a precíz leírása megtalálható hivatkozások
-között\cite{fmes}. Az algoritmus alapötlete egy iteratív megoldás:
+között\cite{fmes}. Az algoritmus alapötlete egy iteratív megoldás, mely a
+következõ oldalon látható. Definiált egy két csomópontot összehasonlító
+függvény. A fa levelei közül megkeressük azokat, melyek megegyeznek és azonos
+útvonalon elérhetõek. Ha ezzel megvagyunk, a maradék levelek között keressünk
+olyan egyezõ csomópontokat melyek eltérõ útvonalon érhetõek el, de megegyeznek.
+Ezután tekintsük azt a gráfot, melyet a levelek elhagyásával kapunk. Futtassuk
+erre iteratív módon újfent az algoritmust.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes2.eps}
+\caption{A fa leveleinek keresése}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes3.eps}
+\caption{Párosítás egyezõ úton}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes4.eps}
+\caption{Párosítás eltérõ úton}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes5.eps}
+\caption{Második iteráció: levél-keresés}
+
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes6.eps}
+\caption{Második iteráció: párosítás egyezõ úton}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=40mm,keepaspectratio]{fmes/fmes7.eps}
+\caption{Második iteráció: párosítás eltérõ úton}
+\end{figure}
 
 \section{Jövõbeli lehetõségek}
 
