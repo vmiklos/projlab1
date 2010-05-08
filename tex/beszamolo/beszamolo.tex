@@ -231,6 +231,8 @@ A hetet a VIATRA Java API-jával való ismerkedéssel kezdtem, ennek keretében elké
 
 Ezt követte egy, a tanszéken született cikk \cite{changedriven} olvasása, melynek tudását végül nem használtam fel a késõbbiekben a félév során, mivel nem változás-vezérelt algoritmust implementáltam.
 
+\subsubsection*{EMF Compare}
+
 Utána az EMF Compare-rel ismerkedtem. Az
 org .eclipse .emf .compare .examples .standalone csomagban van egy parancssorból
 használható (standalone) példa, ez volt az amit a konzin véletlenül kitöröltünk
@@ -285,6 +287,43 @@ fenti 2 match típustól.
 Ha interaktív összehasonlítás a cél, akkor a hivatkozás-jegyzékben említett
 \cite{eclipseforum} bejegyzés hasznos lehet.
 
+\subsubsection*{Diff XML}
+
+A DiffXML nevû eszközt azért tartom kiválónak a labor szempontjából, mert kiterjedt teszteset-gyûjteménnyel rendelkezik XML modellekbõl. Egy rövid kiértékelés alapján az eszköz tudja is amit hirdet magáról: XML modelleket tud összehasonlítani és foltozni (patch), a metamodell figyelembevétele nélkül.
+
+Felhasználói szemszögbõl úgy mûködik, hogy 2 XML modellt kér bemenetként és kimenetként egy olyan XML modellt ad, mely operációk listáját tartalmazza, mellyel el lehet jutni az elsõ modellbõl a másodikba. Ezt az eszköz szerkesztési szövegnek (edit script) hívja. Így tehát egy tipikus 3-utas egyesítés (3-way merge) megoldható a következõ lépésekkel:
+
+\begin{itemize}
+\item A közös õs és \emph{A} között végzünk összehasonlítást, ebbõl lesz egy folt
+\item A foltot alkalmazzuk \emph{B}-re, a kimenet lesz az egyesített eredmény
+\end{itemize}
+
+A probléma a következõ: ugyan jól formázott lesz az eredmény, de nem biztos,
+hogy a sémának is megfelel (valid).
+
+További gond, hogyha ütközés lenne (például x-et módositjuk egyszer A-ra, másszor
+B-re), akkor azt nem veszi észre, mivel az operácio csak azt írja, hogy "töröld
+ki az elemet, írj bele A-t". Így aztán attól függõen A v B lesz az eredmény,
+hogy melyiket hasonlítjuk és melyiket foltozzuk.
+
+Azt is megnéztem, hogy B-t hasonlítva és A-t foltozva a kapott egyesítési eredmény
+azonos az elõbbi módon kapott egyesítési eredménnyel, ami bizakodásra ad okot
+az háttérben munkálkodó algoritmust tekintve.
+
+\subsubsection*{FMES}
+
+A DiffXML eszköz összehasonlító moduljában alapértelmezett esetben egy FMES
+nevû algoritmus oldja meg a tényleges összehasonlítást.
+
+A formátum, amit kimenetként használ a diffxml és bemenetként a patchxml le van
+írva a szerzõ disszertációjában\cite{diffxml}, de csak egyszerûen olvasva is
+meglehetõsen intuitív.  Ebbõl következik, hogy a patchxml nem különösebben
+bonyolult, egyszerûen csak végrehajtja a mûveleteket a bemenetrõl. Az érdekes
+rész a diffxml.
+
+A FMES algoritmusnak a precíz leírása megtalálható hivatkozások
+között\cite{fmes}. Az algoritmus alapötlete egy iteratív megoldás:
+
 \section{Jövõbeli lehetõségek}
 
 \begin{thebibliography}{4}
@@ -308,6 +347,8 @@ Ha interaktív összehasonlítás a cél, akkor a hivatkozás-jegyzékben említett
 \bibitem{changedriven} Gábor Bergmann, István Ráth, Gergely Varró, Dániel Varró: Change-Driven Model Transformations: Taxonomy and Language
 \bibitem{genericmatchengine} EMF FAQ: GenericMatchEngine leírás, http://wiki.eclipse.org/ EMF\_Compare\_FAQ \#What\_kind \_of\_.22 strategies.22 \_use\_EMF \_compare\_.3F
 \bibitem{eclipseforum} EMF Compare: How to use EMF Compare in Java, http://www.eclipse.org/ forums/ index.php ?t=msg\&th=37716 \&goto=122763\#msg\_122763
+\bibitem{diffxml} Adrian Mouat: Tools for comparing and patching XML files, http://prdownloads .sourceforge.net/ diffxml/dissertation.ps ?download
+\bibitem{fmes} Sudarshan S. Chawathe, Anand Rajaraman, Hector Garcia-Molina, Jennifer Widom: Change Detection in Hierarchically Structured Information
 
 \end{thebibliography}
 \end{document}
