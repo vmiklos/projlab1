@@ -155,7 +155,7 @@ Mindkét megoldásnak megvannak a maga elõnyei és hátrányai.
 
 Az elsõ megoldás elõnye, hogyha például egy adott osztály átnevezése 100 sor kód módosításával jár, a mûvelet tárolása (az eredményezett változtatások tárolása helyett) sokkal kompaktabb változáslistát eredményez. Hátránya, hogy nem feltétlenül felcserélhetõek az egyes mûveletek. Maradva az osztály átnevezési problémánál, ha \emph{A} fejlesztõ még a régi nevével hivatkozik egy hozzáadott kódsorban az osztályra, akkor azt az elõtt kell alkalmazni, hogy \emph{B} azt átnevezte. Ha \emph{A} is nevezett át osztályokat, és \emph{B} is adott hozzás kódsorokat melyek még a régi nevével hivatkoznak az osztályokra, akkor egy olyan triviális megoldás, mely csak egymásután egyszer \emph{A}, aztán \emph{B} (vagy fordítva) mûveleteit alkalmazza nem vezet megoldásra. Ha analógiát keresünk a forráskódokat verziózó rendszerekkel, a Darcs verziókezelõ ilyen algoritmussal rendelkezik. (Ott ezt a problémát úgy oldják meg, hogy az egyes változástípusok mögött precíz matematikai szemantika van, cserébe viszont a gyakorlatban ez nem mindig ad elfogadható gyorsaságú eredményt az algoritmus nagy komplexitása miatt.)
 
-A második megoldásnak a legszembetûnõbb elõnye, hogy nem érzékeny a változtatások számára, hiszen csak az elsõ és a végsõ állapotot veszi figyelembe. Természetesen cserébe ilyenkor gondjaink lehetnek abban az esetben ha a refactoring mértéke nem elhanyagolható az egyéb változtatásokhoz viszonyítva.
+A második megoldásnak a legszembetûnõbb elõnye, hogy nem érzékeny a változtatások számára, hiszen csak az elsõ és a végsõ állapotot veszi figyelembe. Továbbá ez az egyetlen lehetõségünk ha gyorsan szeretnénk az összehasonlítást elvégezni és a modell szerkesztõ nem támogatja az operációk rögzítését.Természetesen cserébe ilyenkor gondjaink lehetnek abban az esetben ha a refactoring mértéke nem elhanyagolható az egyéb változtatásokhoz viszonyítva. (Forráskód kezelésénél a Git rendszer alapértelmezett egyesítõ algoritmusa ilyen: olyankor is adhat konfliktust mikor az operációk rögzítésével az egyesítés automatizálható lenne, viszont az egyesítõ algoritmus gyorsaságával szemmel láthatólag nincsenek gondok.)
 
 Összességében tehát megállapíthatjuk, hogy minkét technika lehet sikeres, nem érdemes egyiket se elvetni.
 
@@ -225,6 +225,66 @@ A következõ lépés a VIATRA2 rendszerrel való ismerkedés volt. Mivel egy hallgató
 
 Ezzel párhuzamosan megpróbáltam felvenni a kapcsolatot az \emph{Odyssey-VCS}\cite{odyssey} szerzõivel, melynek célja egy modellek kezelésére kitalált EMF-alapó verziókezelõ lenne. Sajnálatos módon a szoftver elsó blikkre (out of the box) nem mûködött, a forráskódot meg többszöri levélváltás után se sikerült végül megkapni, bár határozott elutasítást nem kaptam (kutatási célokra).
 
+\subsection{Hetedik hét}
+
+A hetet a VIATRA Java API-jával való ismerkedéssel kezdtem, ennek keretében elkészült egy egyszerû (hello world) model comparator\cite{viatrahello}, ami csak összehasonlítja az egyes entitások nevét, relációinak számát, és ez alapján tekinti egyezõnek az egyes entitásokat vagy sem.
+
+Ezt követte egy, a tanszéken született cikk \cite{changedriven} olvasása, melynek tudását végül nem használtam fel a késõbbiekben a félév során, mivel nem változás-vezérelt algoritmust implementáltam.
+
+Utána az EMF Compare-rel ismerkedtem. Az
+org .eclipse .emf .compare .examples .standalone csomagban van egy parancssorból
+használható (standalone) példa, ez volt az amit a konzin véletlenül kitöröltünk
+fordítási hiba miatt (mondván, hogy az csak példa). Mivel ez egy jó belépési
+pont, letöltöttem újra, megjavítottam a függõségeit (dependency) és így már
+lefordult. Innen már látszik, hogy az EMF esetén az összehasonlítás két részbõl
+áll: elõször van egy \emph{match} rész, ez találja meg a hasonló részeket -
+\emph{MatchService.doMatch()}, 2 EObject-et tud összehasonlítani -, majd ezután
+jön a diffelés, ami a különbözõ részeket találja meg -
+\emph{DiffService.doDiff()} ami egy MatchModel-t var, amit a
+\emph{MatchService} ad vissza -, végül az ez által adott DiffModel-en tud
+lefutni a merge - \emph{MergeService.merge()}.
+
+Tehát ami elõször számunkra érdekes lehet, az az, hogy a \emph{MatchService}
+hogy mûködik. Nyilván ez is strategy patternnel van megoldva, az
+\emph{IMatchEngine} interfász implementaciójával. Az EMF beépítetten egyetlen
+implementációt ad, ez pedig a \emph{GenericMatchEngine}. Ez egy remek 2000
+soros implementáció, a részletek megismerésére idõ hiányában nem vállalkoztam,
+de egy rövid összefoglaló \cite{genericmatchengine} leírja, hogy milyen
+metrikákat használ.
+
+Hasonló módon a match modelbõl a diff egy IDiffEngine-t implementáló osztállyal
+oldható meg, erre a kódban az implementáció a \emph{GenericDiffEngine}.
+(Szinten komplexebb, 900 sor.) Végül az utolsó lépés interfésze az
+\emph{IMerger}, ennek egy implementációja a \emph{DefaultMerger} (~350 sor).
+
+Tesztesetek tekintetében statikus modelljeik nincsenek, viszont van egy
+\emph{EcoreModelUtils .createModel()}, amit lehet paraméterezni, hogy milyen
+tesztmodelleket generáljon. (Egy egyszerû könyvek-szerzõk modell n az n-hez
+kardinalitású kapcsolattal, az egyes attribútumok értékei véletlenszerûek, de
+az egyedi azonosítást biztonsító \emph{xmiid} attribútumok stimmelnek, így a
+matchernek meg kell találnia az egyezõ elemeket a modellben.) Ezt teszteli a
+TwoWayContentMatchTest. Ezen kívül van még másik 2 teszt:
+
+\emph{TwoWayModelMatchTest}: az elõzõ tesztben használt modellel dolgozik ez
+is, nézi, hogy alapesetben minden elemet össze tud párosítani, aztán módosít
+egy szerzõt, és várja, hogy azt a szerzõt már ne tudja megtalálni (legyen hozzá
+\emph{UnMatchElement}), mivel a kettõnek más a könyvlistája.
+(\emph{TwoWayResourceMatchTest}: hasonló, de resourcematch-et használ.)
+
+Tehát a 3 match típus:
+
+\begin{itemize}
+\item ContentMatch: komparálás tartalom alapján (testvérek és szülõk figyelmen kívül hagyása)
+\item ModelMatch: normál komparálás (figyelembe veszi az elõbb figyelmen kívül hagyott relációkat)
+\item ResourceMatch: ez EObject-ek helyett Resource-okra fut. A dokumentáció
+alapján úgy tûnik, hogy a Resource gyakorlatilag egy perzisztens tároló,
+lehetnek benne EObject-ek, tehát ez algoritmikusan nem nagyon különbözik a
+fenti 2 match típustól.
+\end{itemize}
+
+Ha interaktív összehasonlítás a cél, akkor a hivatkozás-jegyzékben említett
+\cite{eclipseforum} bejegyzés hasznos lehet.
+
 \section{Jövõbeli lehetõségek}
 
 \begin{thebibliography}{4}
@@ -244,6 +304,10 @@ Ezzel párhuzamosan megpróbáltam felvenni a kapcsolatot az \emph{Odyssey-VCS}\cit
 \bibitem{xdiff} Yuan Wang, David J. DeWitt, Jin-Yi Cai: X-Diff - An Effective Change Detection Algorithm for XML Documents
 \bibitem{karer} VIATRA2 Model Comparator by Name, https://svn.inf.mit.bme.hu/ viatra/viatra\_extra/ R3/mit.bme.hu/ trunk/org.eclipse.viatra2.model.comparator/ src/org/ eclipse/viatra2/ model/comparator/ algorithms/karer/
 \bibitem{odyssey} Hamilton Oliveira, Leonardo Murta, Cláudia Werner: Odyssey-VCS - a Flexible Version Control System for UML Model Elements
+\bibitem{viatrahello} Saját kód: VIATRA egyszerû modell összehasonlító, https://svn.inf.mit.bme.hu/ viatra/viatra\_extra/ R3/mit.bme.hu/ trunk/org.eclipse.viatra2.model.comparator/ src/org/ eclipse/viatra2/ model/comparator/ algorithms/vmiklos/hello/
+\bibitem{changedriven} Gábor Bergmann, István Ráth, Gergely Varró, Dániel Varró: Change-Driven Model Transformations: Taxonomy and Language
+\bibitem{genericmatchengine} EMF FAQ: GenericMatchEngine leírás, http://wiki.eclipse.org/ EMF\_Compare\_FAQ \#What\_kind \_of\_.22 strategies.22 \_use\_EMF \_compare\_.3F
+\bibitem{eclipseforum} EMF Compare: How to use EMF Compare in Java, http://www.eclipse.org/ forums/ index.php ?t=msg\&th=37716 \&goto=122763\#msg\_122763
 
 \end{thebibliography}
 \end{document}
