@@ -1,0 +1,237 @@
+\documentclass[12pt,a4paper,oneside]{article} % part, *section, *paragraph
+%\documentclass[12pt,a4paper,oneside]{report} % part, *chapter, *section, *paragraph
+%\documentclass[12pt,a4paper,oneside]{book} % part, *chapter, *section, *paragraph
+
+%\def\magyarOptions{footnote=starplain} % *, ** típusú lábjegyzet
+\usepackage[magyar]{babel}
+\ifx\magyarOptions\relax\else 
+  \PackageError{magyar.ldf}{http://www.math.bme.hu/latex/}{}        
+  \csname @@end\endcsname \fi
+\usepackage[latin2]{inputenc}
+\usepackage[T1]{fontenc} %\showhyphens{integetnem} \showhyphens{meggyültetvény}
+%\usepackage{ucs}\usepackage[utf8x]{inputenc}
+%\usepackage{fullpage} %\usepackage[margin=2cm]{geometry}
+%\usepackage{amsmath,amssymb}
+\usepackage{url} %VAGY %\usepackage[unicode]{hyperref}
+%\usepackage{listings} % forráskódhoz
+%\usepackage{color} 
+\usepackage{graphicx}
+\usepackage{times}
+\usepackage{fullpage}
+%\usepackage{showkeys} % \label{} kiírása \ref{}hez
+ 
+\let\stdsection\section
+\renewcommand\section{\clearpage\stdsection}
+\begin{document}
+\begin{center}
+\vspace{2em}
+\large{\bf{}BUDAPESTI M\H{U}SZAKI \'ES GAZDAS\'AGTUDOM\'ANYI EGYETEM}
+\vspace{.5em}
+
+\includegraphics[width=88mm]{BME1782nagy.eps}
+\vspace{.5em}
+
+\large{\bf{}VILLAMOSM\'ERN\"OKI \'ES INFORMATIKAI KAR\\
+M\'ERN\"OK INFORMATIKUS SZAK}
+
+\vspace{1.5em}
+
+\Large{Informatikai Technol\'ogi\'ak szakir\'any\\
+Rendszerfejleszt\'es \'agazat}
+
+\vspace{1.5em}
+
+\Large{\bf{}\"On\'all\'o labor (BMEVIIIA337)}
+
+\vspace{1.5em}
+
+\LARGE{\bf{}Soros vonalon érkez\H{o} mérési adatok fogadása-{}feldolgozása Erlang alapú rendszerben}
+
+\vspace{2em}
+
+\Large{K\'esz\'itette:\\
+{\bf{}Vajna Miklós (AYU9RZ)}}
+
+\vspace{6em}
+
+\Large{Konzulens:\\
+{\bf{}Dr. Hanák Péter és Kiss Norbert}}
+
+\vspace{3em}
+
+IR\'ANY\'IT\'ASTECHNIKA \'ES INFORMATIKA TANSZ\'EK
+
+{\bf{}2009.}
+\end{center}
+\thispagestyle{empty}
+\newpage
+
+\tableofcontents
+\newpage
+
+%\begin{abstract}
+%\end{abstract}
+
+\section{Környezet leírása}
+
+A BME Egészségügyi Mérnöki Tudásközpont laborjában arra a kérdésre
+keressük a választ, hogy lehetséges-{}e orvosi m\H{u}szerekt\H{o}l soros porton
+mérési adatokat fogadni, illetve feldolgozni.
+
+A teszt m\H{u}szer egy, a TaiDoc cég által gyártott, TD-{}3213 típusú
+vérnyomás-{} és vércukormér\H{o} készülék. A m\H{u}szerhez egy szabványos 2.5mm-{}es
+hangkábellel lehet csatlakozni, melyhez nem volt adatkábel. A
+készülékhez elérhet\H{o} egy zárt forráskódú szoftver \cite{Clever Chek Software}, amellyel le lehet
+tölteni a számítógépre a mérési eredményeket.
+
+A számítógép operációs rendszere a fejlesztés során Linux volt, melyen
+az Erlang R12B-{}5 verziója futott.
+
+Felmerült a probléma, hogy a mai számítógépek többségén már nincs soros
+port, így egy soros-{}USB átalakító használatával hidaltuk át a problémát.
+
+A labor során a saját notebookomon dolgoztam, majd a heti konzultációk
+során bevittem a tanszékre mind a m\H{u}szert mind a notebookomat és ott
+demonstráltam az eltelt hét során elért eredményeket.
+
+\section{Feladatok leírása}
+
+A labor során az els\H{o} célkit\H{u}zés az volt, hogy elkészüljön egy saját
+adatkábel a m\H{u}szerhez. A kábel használhatóságát a zárt forráskódú
+szoftverrel lehetett tesztelni. Ha megvolt a megfelel\H{o} kábel akkor
+vissza kellett fejteni a kommunikációs protokollját a m\H{u}szernek, és a
+cél egy saját (számunkra legalábbis) nyílt forráskódú szoftver
+fejlesztése volt, mellyel ugyanazokat az információkat le tudtuk
+kérdezni, mint a zárt forráskódú szoftverrel.
+
+Amennyiben id\H{o} marad rá, a fogadás és feldolgozás után cél lenne egy
+olyan felhasználói interfész megalkotása, ahol a beteg megjegyzéseket
+f\H{u}zhet a mért eredményekhez. Így kés\H{o}bb például egy grafikon kiugró
+értékénél visszakereshet\H{o}, hogy a felhasználó milyen kommentárt f\H{u}zött
+az akkori méréshez, vagy korábbi mérési adatok kés\H{o}bb is
+visszakereshet\H{o}ek mikor a m\H{u}szer már nem tárolja \H{o}ket.
+
+\section{Munkanapló}
+
+\subsection{Harmadik hét}
+
+Az Erlang környezettel kezdtem el ismerkedni, az angol könyv \cite{Programming Erlang}
+segítségével. Dokumentáció alapján való telepítés után a következ\H{o}
+témákkal ismerkedtem meg az Erlang nyelven belül: szekvenciális
+programozás, kivételkezelés, bit szintakszis.
+
+\subsection{Negyedik hét}
+
+Foglalkoztam a build környezet kialakításával, valamint a többszálú
+programozással. Ez azért lesz kés\H{o}bb fontos, mert a szálak is
+üzenetekkel kommunikálnak egymással, és a soros portot is majd így tudom
+olvasni. Ezen kívül beüzemeltem egy USB-{}soros átalakítót és evaluáltam a
+különböz\H{o} (serial, sl, serial\_gen) Erlang soros port drivereket. Végül a
+FAQ-{}ban is ajánlott \emph{serial} nev\H{u} driver mellett döntöttem.
+
+\subsection{Ötödik hét}
+
+Erlangban a párhuzamos programozással kapcsolatos hibakezelést néztem
+meg, valamint az elosztott programok készítését. Mivel még nem jutottam
+hozzá m\H{u}szerhez, a telefonomat használva teszt eszközként egy példa
+Erlang programot írtam amely szemlélteti a soros port kezelését a serial
+driver használatával.
+
+\subsection{Hatodik hét}
+
+Erlangban a C-{}ben írt driverek készítésének néztem utána, valamint a
+file-{}kezelés témakörét néztem meg. Erre azért lesz szükség, mert a mért
+adatokat tárolni kell majd, valamint valószín\H{u}síthet\H{o}, hogy a soros port
+drivere nem nyújt teljes funkcionalitást, és ebben az esetben -{} vagy
+hibakeresés céljából a soros port driverbe is bele kell nyúlni.
+
+\subsection{Hetedik hét}
+
+A konzulessel megbeszéltük, hogy egy vérnyomás-{} és vércukor-{}mér\H{o} m\H{u}szert
+fogok kezelni, amihez van egy kereskedelmi program, de adatkábel nincs,
+így azt nekem kell elkészíteni. Megtaláltam \cite{Kai-Wen Kan} az audió kábel
+kiosztását (m\H{u}szer fel\H{o}li vég), a a soros port kiosztását \cite{RS-232}
+(számítógép fel\H{o}li vég), és ekkor már össze tudtam forrasztani az
+adatkábelt.
+
+\subsection{Nyolcadik hét}
+
+A kábelt összeforrasztottam, a kereskedelmi programot megkaptam a
+m\H{u}szerhez, és azzal sikerült is lekérni a korábban mért, és a m\H{u}szer
+által mért adatokat. De ez a módszer meglehet\H{o}sen kényelmetlen, a zárt
+forrású program csak Windows rendszeren érhet\H{o} el, így külön virtuális
+gépben kellett tesztelni. Mivel mi hordozható, és igényeink szerint
+integrálható hozzáférést szeretnénk, a következ\H{o} lépés saját a m\H{u}szer
+kommunikációs protokolljának visszafejtése lesz.
+
+\subsection{Kilencedik hét}
+
+Az után kutattam, hogy a kereskedelmi program adat-{}letöltési
+funkciójának használata közben hogyan lehetne sniffelni a soros port
+forgalmát, de csak addig sikerült eljutni, hogy szoftveres megoldást
+fogok használni, nem hardware-{}eset.
+
+\subsection{Tizedik hét}
+
+Sikerült megfelel\H{o} szoftveres megoldást találni. A sniffelést a
+virtuális gépen végzem két szoftver használatával. A VSPE \cite{VSPE} létrehoz
+egy virtuális portot, majd a SerialMon \cite{SerialMon} beépül a virtuális és a valós
+port közé a klasszikus man-{}in-{}the-{}middle módszerrel.
+
+Eljutottam oda, hogy tudom, hogy hogyan kell megszólítani a m\H{u}szert,
+valamint milyen módon íródik le, hogy melyik mérési eredmény melyik
+adatára vagyok kíváncsi. A tényleges adatok négyszer 2 byte-{}on érkeznek,
+de a tartalmuk még rejtély.
+
+\subsection{Tizenegyedik hét}
+
+Sikerült megfejteni a konzulens segítségével az összes 2 byte-{}os adat
+tartalmát (mérés id\H{o}pontja, típusa, mért adatok). A következ\H{o} lépés egy
+prototípus készítése lesz amely demonstrálja, hogy jól sikerült
+visszafejteni a protokollt.
+
+\subsection{Tizenkettedik hét}
+
+Elkészítettem a prototípust Python nyelven.
+
+\subsection{Tizenharmadik hét}
+
+Kiderült, hogy annak ellenére, hogy a telefont meg tudom szólítani
+Erlangból, a m\H{u}szert sajnos nem pont ugyanígy kell kezelni, így az
+Erlang verzióval nem készültem el ezen a héten, a jöv\H{o} hétre marad.
+
+\subsection{Tizennegyedik hét}
+
+Elkészült az Erlang verzió. Végül kiderült, hogy az volt a probléma,
+hogy a C driver \texttt{open(path, O\_RDWR | O\_NOCTTY | O\_NONBLOCK)} helyett
+\texttt{open(path, O\_RDWR)} hívást használt, és ezért nem jöttek meg az
+üzenetek Erlangban mikor olvasni akartam a soros portról.
+
+\section{Jöv\H{o}beli lehet\H{o}ségek}
+
+A fogadott adatokat feldolgozás után célszer\H{u} lenne valamilyen
+adatbázisban tárolni. A jöv\H{o}ben többfajta m\H{u}szert is be lehetne kötni a
+rendszerbe. A felhasználói interfészen lehet\H{o}ség volna olyan adatok
+bevitelére amit a felhasználó a m\H{u}szeren nem adhat meg, pl. közérzet a
+mérés id\H{o}pontjában. Az Erlang adta lehet\H{o}ségeket kihasználva elosztott
+rendszert készíthetnénk, tehát a m\H{u}szerrel kommunikáló és az adatokat
+tároló folyamat nem feltétlenül kéne, hogy egy gépen fusson.
+
+
+\begin{thebibliography}{4}
+\addcontentsline{toc}{section}{Hivatkoz\'asok}
+
+\bibitem{Clever Chek Software} Clever Check Software, http://www.simplediagnostics.com/\-documents/\-59.html
+
+\bibitem{Programming Erlang} Joe Armstrong: Programming Erlang, http://www.pragprog.com/titles/jaerlang/programming-erlang
+
+\bibitem{Kai-Wen Kan} Kai-Wen Kan: Development and evaluation of a home telehealth system for diabetic patients, http://designer.mech.yzu.edu.tw/\-article/\-articles/\-thesis/\-Master\_95KanKaiWen/\-PDF/\-(2006-{}10-{}31)\%20Chapter\%202.\%20Integration\%20of\%20the\%20distributed\%20data\%20server\%20 with\%20the\%20vital\%20sign\%20meter.pdf
+
+\bibitem{RS-232} PC serial port (RS-232 DE9) pinout, http://pinouts.ru/\-SerialPorts/\-Serial9\_pinout.shtml
+
+\bibitem{VSPE} VSPE: tool for serial ports emulation, http://www.eterlogic.com/\-Products.VSPE.html
+
+\bibitem{SerialMon} SerialMon: A free RS232 serial port monitor/sniffer software for Windows, http://www.serialmon.com/
+
+\end{thebibliography}
+\end{document}
