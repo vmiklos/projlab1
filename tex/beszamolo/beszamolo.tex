@@ -496,12 +496,12 @@ Ezen kívül elkészítettem a labor végén esedékes prezentáció fóliáit.
 Elkészítettem a félévi munkát tükrözõ részletes dokumentációt (ezt a
 dokumentumot). E dokumentáció alapjául a félév során vezetett wiki
 oldalak\cite{wikireadme} \cite{wikilog} szolgáltak. A dokumentáció tördelése a
-\TeX{} 3.141592 verziójával készült, Frugalware Linux operációs rendszeren. A
-munkához az Eclipse 3.5-ös (Galileo) verzióját használtam, míg a VIATRA
-rendszert SVN-bõl, a r1353-at. Erre (és nem egy stabil kiadás használatára)
-azért volt szükség, mert a félév elején még nem volt elérhetõ a VIATRA 3.1-es
-kiadása, az elõzõ kiadás pedig már kifejezetten õsinek számított, a konzulens
-se javasolta a használatát.
+a tanszék által küldött fedlap alapján a \TeX{} 3.141592 verziójával készült,
+Frugalware Linux operációs rendszeren. A munkához az Eclipse 3.5-ös (Galileo)
+verzióját használtam, míg a VIATRA rendszert SVN-bõl, a r1353-at. Erre (és nem
+egy stabil kiadás használatára) azért volt szükség, mert a félév elején még nem
+volt elérhetõ a VIATRA 3.1-es kiadása, az elõzõ kiadás pedig már kifejezetten
+õsinek számított, a konzulens se javasolta a használatát.
 
 A VIATRA rendszer fejlesztését Eclipse-bõl futtatott Eclipse-ben teszteltem (runtime Eclipse), mely a következõ alap VIATRA projekteket tartalmazta:
 
@@ -529,6 +529,15 @@ A VIATRA rendszer fejlesztését Eclipse-bõl futtatott Eclipse-ben teszteltem (run
 Valamint természetesen a már korábban említett org.eclipse.viatra2.imports.vmiklos.xml és org.eclipse.viatra2.model.comparator.
 
 \section{Jövõbeli lehetõségek}
+
+Számos lehetõséget kellett figyelmen kívül hagyni idõ hiányában ezek közül a legfontosabbak:
+
+\begin{itemize}
+\item XML importer: Séma megkövetelése, így a VIATRA-beli entitásokhoz típusok lennének rendelhetõek.
+\item Csak az összehasonlító került megvalósításra, ennek kimenete alapján egy modell egyesítõ eszközt is lehetne készíteni.
+\item A két entitást összehasonlító elem finomítható lenne.
+\item Az FMES fákon dolgozik, egyéb gráf-összehasonlító algoritmusok is elérhetõek (pl. Groove-ból).
+\end{itemize}
 
 \begin{thebibliography}{4}
 \addcontentsline{toc}{section}{Hivatkozások}
