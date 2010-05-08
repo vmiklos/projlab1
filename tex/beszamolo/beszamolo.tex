@@ -81,7 +81,7 @@ mérési adatokat fogadni, illetve feldolgozni.
 A teszt m\H{u}szer egy, a TaiDoc cég által gyártott, TD-{}3213 típusú
 vérnyomás-{} és vércukormér\H{o} készülék. A m\H{u}szerhez egy szabványos 2.5mm-{}es
 hangkábellel lehet csatlakozni, melyhez nem volt adatkábel. A
-készülékhez elérhet\H{o} egy zárt forráskódú szoftver \cite{Clever Chek Software}, amellyel le lehet
+készülékhez elérhet\H{o} egy zárt forráskódú szoftver, amellyel le lehet
 tölteni a számítógépre a mérési eredményeket.
 
 A számítógép operációs rendszere a fejlesztés során Linux volt, melyen
@@ -149,8 +149,8 @@ hibakeresés céljából a soros port driverbe is bele kell nyúlni.
 
 A konzulessel megbeszéltük, hogy egy vérnyomás-{} és vércukor-{}mér\H{o} m\H{u}szert
 fogok kezelni, amihez van egy kereskedelmi program, de adatkábel nincs,
-így azt nekem kell elkészíteni. Megtaláltam \cite{Kai-Wen Kan} az audió kábel
-kiosztását (m\H{u}szer fel\H{o}li vég), a a soros port kiosztását \cite{RS-232}
+így azt nekem kell elkészíteni. Megtaláltam az audió kábel
+kiosztását (m\H{u}szer fel\H{o}li vég), a a soros port kiosztását 
 (számítógép fel\H{o}li vég), és ekkor már össze tudtam forrasztani az
 adatkábelt.
 
@@ -174,8 +174,8 @@ fogok használni, nem hardware-{}eset.
 \subsection{Tizedik hét}
 
 Sikerült megfelel\H{o} szoftveres megoldást találni. A sniffelést a
-virtuális gépen végzem két szoftver használatával. A VSPE \cite{VSPE} létrehoz
-egy virtuális portot, majd a SerialMon \cite{SerialMon} beépül a virtuális és a valós
+virtuális gépen végzem két szoftver használatával. A VSPE létrehoz
+egy virtuális portot, majd a SerialMon beépül a virtuális és a valós
 port közé a klasszikus man-{}in-{}the-{}middle módszerrel.
 
 Eljutottam oda, hogy tudom, hogy hogyan kell megszólítani a m\H{u}szert,
@@ -202,10 +202,7 @@ Erlang verzióval nem készültem el ezen a héten, a jöv\H{o} hétre marad.
 
 \subsection{Tizennegyedik hét}
 
-Elkészült az Erlang verzió. Végül kiderült, hogy az volt a probléma,
-hogy a C driver \texttt{open(path, O\_RDWR | O\_NOCTTY | O\_NONBLOCK)} helyett
-\texttt{open(path, O\_RDWR)} hívást használt, és ezért nem jöttek meg az
-üzenetek Erlangban mikor olvasni akartam a soros portról.
+Elkészült az Erlang verzió.
 
 \section{Jöv\H{o}beli lehet\H{o}ségek}
 
@@ -221,17 +218,7 @@ tároló folyamat nem feltétlenül kéne, hogy egy gépen fusson.
 \begin{thebibliography}{4}
 \addcontentsline{toc}{section}{Hivatkoz\'asok}
 
-\bibitem{Clever Chek Software} Clever Check Software, http://www.simplediagnostics.com/\-documents/\-59.html
-
-\bibitem{Programming Erlang} Joe Armstrong: Programming Erlang, http://www.pragprog.com/titles/jaerlang/programming-erlang
-
-\bibitem{Kai-Wen Kan} Kai-Wen Kan: Development and evaluation of a home telehealth system for diabetic patients, http://designer.mech.yzu.edu.tw/\-article/\-articles/\-thesis/\-Master\_95KanKaiWen/\-PDF/\-(2006-{}10-{}31)\%20Chapter\%202.\%20Integration\%20of\%20the\%20distributed\%20data\%20server\%20 with\%20the\%20vital\%20sign\%20meter.pdf
-
-\bibitem{RS-232} PC serial port (RS-232 DE9) pinout, http://pinouts.ru/\-SerialPorts/\-Serial9\_pinout.shtml
-
-\bibitem{VSPE} VSPE: tool for serial ports emulation, http://www.eterlogic.com/\-Products.VSPE.html
-
-\bibitem{SerialMon} SerialMon: A free RS232 serial port monitor/sniffer software for Windows, http://www.serialmon.com/
+\bibitem{Programming Erlang} Joe Armstrong: Programming Erlang, http://www.p.com/jaerlang/programming
 
 \end{thebibliography}
 \end{document}
