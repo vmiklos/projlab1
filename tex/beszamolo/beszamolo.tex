@@ -210,6 +210,21 @@ Levelezés alapján a probléma sokadik megfogalmazása: az egyesítõ algoritmus jó l
 
 Ezen kívül még probléma, hogy az algoritmusnak nagy elemszámú modelleket is jól kell tudnia kezelnie, a jelenlegi megoldások nagyrésze párezer elem felett már nem végez gyakorlatben megengedhetõ idõn belül.
 
+\subsection{Ötödik hét}
+
+A héten olyan gráfok összehasonlítását végzõ algoritmusokat kerestem, melyek fák (körmentes gráfok). A szakoridalom ilyen téren már kevésbe gazdag, pedig számos metamodell-csoport (például az összes EMF által kezelt) szigorú tartalmazási hierarchia szerint épül fel, tehát faként reprezentálható.
+
+Az egyik legérdekesebb Wang, DeWitt és Cai cikke \cite{xdiff}, melyben az
+\emph{X-Diff} algoritmust vázolják. Az algoritmust alapötlete nagyon hasonlít a
+késõbb tárgyalt \emph{FMES} algoritmushoz, viszont ehhez nem találtam
+nyilvánosan elérhetõ mûködõ kódot.
+
+\subsection{Hatodik hét}
+
+A következõ lépés a VIATRA2 rendszerrel való ismerkedés volt. Mivel egy hallgató már korábban foglalkozott modell összehasonlítási témával, így elõször az ö algoritmusát \cite{karer} próbáltam ki. Ez a keretrendszerrel való ismerkedéshez kíváló feladat volt, az algoritmus viszont az én inputomra lefagyott (\emph{NullPointerException}).
+
+Ezzel párhuzamosan megpróbáltam felvenni a kapcsolatot az \emph{Odyssey-VCS}\cite{odyssey} szerzõivel, melynek célja egy modellek kezelésére kitalált EMF-alapó verziókezelõ lenne. Sajnálatos módon a szoftver elsó blikkre (out of the box) nem mûködött, a forráskódot meg többszöri levélváltás után se sikerült végül megkapni, bár határozott elutasítást nem kaptam (kutatási célokra).
+
 \section{Jövõbeli lehetõségek}
 
 \begin{thebibliography}{4}
@@ -226,6 +241,9 @@ Ezen kívül még probléma, hogy az algoritmusnak nagy elemszámú modelleket is jól 
 \bibitem{comparechal} Y Lin, J Zhang, J Gray: Model Comparison - A Key Challenge for Transformation Testing and Version Control in Model Driven Software Development
 \bibitem{emfcompare} Eclipse Modeling Framework Compare, http://wiki.eclipse.org/index.php/EMF\_Compare
 \bibitem{groove} GRaphs for Object-Oriented VErification, http://sourceforge.net/projects/groove/
+\bibitem{xdiff} Yuan Wang, David J. DeWitt, Jin-Yi Cai: X-Diff - An Effective Change Detection Algorithm for XML Documents
+\bibitem{karer} VIATRA2 Model Comparator by Name, https://svn.inf.mit.bme.hu/ viatra/viatra\_extra/ R3/mit.bme.hu/ trunk/org.eclipse.viatra2.model.comparator/ src/org/ eclipse/viatra2/ model/comparator/ algorithms/karer/
+\bibitem{odyssey} Hamilton Oliveira, Leonardo Murta, Cláudia Werner: Odyssey-VCS - a Flexible Version Control System for UML Model Elements
 
 \end{thebibliography}
 \end{document}
