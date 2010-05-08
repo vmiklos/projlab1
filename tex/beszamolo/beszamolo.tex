@@ -178,7 +178,37 @@ Az idáigi cikkekbõl a következõ szempontok derültek ki az összehasonlító algorit
 
 \subsection{Negyedik hét}
 
+Gráfok hasonlóságának alapkérdéseivel foglalkozik Zager és Verghese prezentációja \cite{graphsimilarity}, melyben a hasonlóság következõ fajtáit határozzák meg:
 
+\begin{itemize}
+\item Izomorfia (csak igen/nem a válasz)
+\item Szerkeszétsi távolság: hány lépés kell ahhoz, hogy az egyik gráfból eljussunk a másikba.
+\item Maximális / minimális mérete a részgráfoknak / szupergráfnak
+\end{itemize}
+
+Zager MSc dolgozata \cite{zagermsc} a következõ újdonságokkal szolgál:
+
+\begin{itemize}
+\item Úgy is neki lehet állni a problémának, hogy a gráfokat különféle módokon mátrixokként ábrázoljuk és ezeket hasonlítjuk össze.
+\item A feljebb említett iteratív hasonlóság-keresõ módszerét itt részletesen kifejti.
+\end{itemize}
+
+Lin, Gray és Jouault cikke \cite{dsmdiff} azt hangsúlyozza, hogy fontos, hogy az algoritmus metamodelltõl független legyen, a cikkben ismertetett \emph{DSMDiff} tetszóleges domain-specifikus nyelven íródott modellpélányokat kíván összehasonlítani. Magáról a DSMDiff-rõl nagyon keveset sikerült kideríteni, pedig a cikk szerint ez nem csak egy terv, hanem implementálták is.
+
+Lin, Zhang és Gray cikke \cite{comparechal} problémafelvetési céllal íródott, nem tartalmaz konkrét megoldásokat. A 2004-es írásban felvetett problémák egy rész már megoldódott, mivel részben a CVS problémái voltak ezek, melyek közül számosat az SVN már ma is megold, például a projekt-szintû verziózást a fájl-szintû helyett.
+
+Ezen a héten ezen kívül a cikkek keresése mellett az is napirendre került, hogy mely már létezõ projekteket lenne érdemes kipróbálni ebben a témakörben.
+
+A két elsõ jelölt:
+
+\begin{itemize}
+\item EMF Compare \cite{emfcompare}
+\item Groove \cite{groove}
+\end{itemize}
+
+Levelezés alapján a probléma sokadik megfogalmazása: az egyesítõ algoritmus jó lenne, ha nem egyetlen metamodell fölött tudna mûködni, cserébe viszont ha semmit se tudunk a metamodellrõl akkor nemnagyon lehet jól egyesíteni. Erre megoldás lehet, ha a metamodell információi is az algoritmus inputját képezik a két modellpélány mellett. Egy másik megoldás lehet, ha a metamodell információi alapján tudunk kódot generálni, és így tetszõleges metamodell számára könnyen elékészíthetõ a mûködõ algoritmus-implementáció.
+
+Ezen kívül még probléma, hogy az algoritmusnak nagy elemszámú modelleket is jól kell tudnia kezelnie, a jelenlegi megoldások nagyrésze párezer elem felett már nem végez gyakorlatben megengedhetõ idõn belül.
 
 \section{Jövõbeli lehetõségek}
 
@@ -190,6 +220,12 @@ Az idáigi cikkekbõl a következõ szempontok derültek ki az összehasonlító algorit
 \bibitem{ericsson} Lars Bendix, Pär Emanuelsson: Requirements for Practical Model Merge - An Industrial Perspective
 \bibitem{zager} LA Zager, GC Verghese: Graph similarity scoring and matching
 \bibitem{umlsimilarity} D Ohst, M Welle, U Kelter: Differences between versions of UML diagrams
+\bibitem{graphsimilarity} Laura Zager, George Verghese: Graph similarity
+\bibitem{zagermsc} Laura Zager: Graph Similarity and Matching
+\bibitem{dsmdiff} Y Lin, J Gray, F Jouault: DSMDiff - a differentiation tool for domain-specific models
+\bibitem{comparechal} Y Lin, J Zhang, J Gray: Model Comparison - A Key Challenge for Transformation Testing and Version Control in Model Driven Software Development
+\bibitem{emfcompare} Eclipse Modeling Framework Compare, http://wiki.eclipse.org/index.php/EMF\_Compare
+\bibitem{groove} GRaphs for Object-Oriented VErification, http://sourceforge.net/projects/groove/
 
 \end{thebibliography}
 \end{document}
