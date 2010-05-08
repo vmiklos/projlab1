@@ -419,6 +419,78 @@ hierarchiát figyelembe véve, ellenben az attribútumokkal már nem foglalkozik.
 
 Ez a munka az SVN-ben szintén elérhetõ\cite{xmlimportsvn}.
 
+\subsection{Tizenegyedik hét}
+
+Az FMES-be megcsináltam az áthelyezések detektálását, aminek az alapötlete a következõ:
+
+\begin{itemize}
+\item Ha van egy ModelElement ami már párosított (tehát van megfelelõje a másik modellben), de
+\item A szülõje nem párosított (tehát törlésre fog kerülni), akkor
+\item Tegyük át a ModelElementet a \emph{szülõ(párja(elem))} alá.
+\end{itemize}
+
+Ezen kívül teszteseteket készítettem három tesztesetet:
+
+\begin{itemize}
+
+\item Egyszerû esetet ahol csak beillesztés ill. törlés van
+\item Áthelyezés-detektálást igénylõ esetet
+\item Kombináltat
+\end{itemize}
+
+A tesztelés módja a következõ: Az XML modelleket rá kell húzni a modelltérre (ehhez szükséges az elõzõ alfejezetben leírt XML importer) és a fájlnévbõl a kiterjesztés elhagyásával képzett névvel ellátott, legfelsõ szintû elem alá kerül létrehozásra a modell VIATRA-s reprezentációja. Ha ezt legalább két modellre megtettük, akkor futtatható a modell összehasonlító úgy, hogy a modelltéren jobb gombbal kattintunk, majd kiválasztjuk a \emph{Contributions} majd \emph{Run model comparator} menüpontokat. Az ekkor megjelenõ ablakban pontosan két modellt kell kiválasztani, majd az OK gombra kattintva indítható az összehasonlítás.
+
+Kimenet a kombinált esetre:
+
+\begin{verbatim}
+test1a.a matches test2a.a
+test1a.a.b matches test2a.a.b
+test1a.a.d matches test2a.a.d
+test1a.a.e matches test2a.a.e
+test1a.a.f unmatched
+test1a.a.b.1 unmatched
+test1a.a.b.4 matches test2a.a.b.4
+test1a.a.b.c matches test2a.a.b.c
+test1a.a.b.c.3 matches test2a.a.b.c.3
+test1a.a.d.5 matches test2a.a.d.5
+test1a.a.e.6 matches test2a.a.e.6
+test1a.a.f.7 matches test2a.a.g.7
+
+test2a.a matches test1a.a
+test2a.a.9 unmatched
+test2a.a.b matches test1a.a.b
+test2a.a.d matches test1a.a.d
+test2a.a.e matches test1a.a.e
+test2a.a.g unmatched
+test2a.a.b.4 matches test1a.a.b.4
+test2a.a.b.c matches test1a.a.b.c
+test2a.a.b.c.3 matches test1a.a.b.c.3
+test2a.a.d.5 matches test1a.a.d.5
+test2a.a.e.6 matches test1a.a.e.6
+test2a.a.g.7 matches test1a.a.f.7
+
+Applying: <insert name="9" parent="a"/>
+Applying: <insert name="g" parent="a"/>
+Applying: <move name="a.f.7" parent="a.g"/>
+Applying: <delete name="a.f"/>
+Applying: <delete name="a.b.1"/>
+\end{verbatim}
+
+\subsection{Tizenkettedik hét}
+
+Az FMES kód kapcsán felmerült, hogy ezt vagy azt miért úgy csináltam, és a
+válasz az volt, hogy azért, hogy a diffxml-es fmes kódtól minimálisan térjen
+csak el a VIATRA felett futó kód. Ennek leginkább akkor volt jelentõsége, mikor még az áthelyezések detektálása nem mûködött. Ez az állapot ottvan SVN-ben (r1360), viszont most kitisztítottam, ami egész pontosan a következõket jelenti:
+
+\begin{itemize}
+\item Az összes osztály és metódus megjegyzésekkel (javadoc) van ellátva.
+\item Az olyan metódusok vagy kódrészek melyek "esetleg a jövõben hasznosak
+lehetnek, de jelenleg nem használtak", törlésre kerültek.
+\item Az xmlimporter kód esetén nem voltak hosszú használatlan kódrészek, de a dokumentáció hiányzott, ezt elkészítettem hozzá.
+\end{itemize}
+
+Ezen kívül elkészítettem a labor végén esedékes prezentáció fóliáit.
+
 \section{Jövõbeli lehetõségek}
 
 \begin{thebibliography}{4}
