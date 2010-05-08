@@ -8,6 +8,7 @@
   \PackageError{magyar.ldf}{http://www.math.bme.hu/latex/}{}        
   \csname @@end\endcsname \fi
 \usepackage[latin2]{inputenc}
+\usepackage{setspace}
 \usepackage[T1]{fontenc} %\showhyphens{integetnem} \showhyphens{meggyültetvény}
 %\usepackage{ucs}\usepackage[utf8x]{inputenc}
 %\usepackage{fullpage} %\usepackage[margin=2cm]{geometry}
@@ -23,6 +24,7 @@
 \let\stdsection\section
 \renewcommand\section{\clearpage\stdsection}
 \begin{document}
+\onehalfspacing
 \begin{center}
 \vspace{2em}
 %\large{\bf{}BUDAPESTI M\H{U}SZAKI \'ES GAZDAS\'AGTUDOM\'ANYI EGYETEM}
@@ -78,153 +80,116 @@ Szolgáltatásbiztos rendszertervezés szakirány
 \tableofcontents
 \newpage
 
-\section{Környezet leírása}
+\section{Bevezetés}
 
-A BME Egészségügyi Mérnöki Tudásközpont laborjában arra a kérdésre
-keressük a választ, hogy lehetséges-{}e orvosi m\H{u}szerekt\H{o}l soros porton
-mérési adatokat fogadni, illetve feldolgozni.
+A BME Hibatûrõ rendszerek kutatócsoportjában arra keresem a választ, hogy
+lehetséges-e általános megoldást adni modellek összehasonlítására (compare)
+és egyesítésére (merge).
 
-A teszt m\H{u}szer egy, a TaiDoc cég által gyártott, TD-{}3213 típusú
-vérnyomás-{} és vércukormér\H{o} készülék. A m\H{u}szerhez egy szabványos 2.5mm-{}es
-hangkábellel lehet csatlakozni, melyhez nem volt adatkábel. A
-készülékhez elérhet\H{o} egy zárt forráskódú szoftver, amellyel le lehet
-tölteni a számítógépre a mérési eredményeket.
+A modellek napjainkban kulcsfontosságú szerepet töltenek be a modellvezérelt szoftverfejlesztés folyamatában. A modellvezérelt fejlesztés alapötlete, hogy minél kevesebb programkódot írjunk meg közvetlenül, és minél több esetben egy modellbõl generáljuk azt. Ennek számos elõnye van:
 
-A számítógép operációs rendszere a fejlesztés során Linux volt, melyen
-az Erlang R12B-{}5 verziója futott.
+\begin{itemize}
+\item Ha a kódgenerátor rendelkezik valamilyen tanusítvánnyal, akkor helyes modell esetén a generált kód is automatikusan megfelel adott elvárásoknak.
+\item A modellek magasabb szintû leírást tesznek lehetõvé, mint ha közvetlenül a program forráskódját írnánk.
+\item A követhetõséget (traceability) megkönnyíti, láthatjuk, hogy agy adott kódsor a modell mely részének felel meg, majd az mely követelmény teljesítése érdekében szükséges.
+\item Forráskód esetében a formális ellenõrzés nehézkes, míg mérnöki modellekbõl jóval egyszerûbb olyan matematikai modelleket elõállítani, melyeken már formális ellenõrzést végezhetünk.
+\end{itemize}
 
-Felmerült a probléma, hogy a mai számítógépek többségén már nincs soros
-port, így egy soros-{}USB átalakító használatával hidaltuk át a problémát.
+A tanszéken fejlesztett VIATRA (VIsual Automated model TRAnsformations) \cite{VIATRA} keretrendszer is ilyen modellekkel dolgozik. A VIATRA modellreprezentációja meglehetõsen egyszerû, a modellek elemei a ModellElementek, és ezeknek két típusa van:
 
-A labor során a saját notebookomon dolgoztam, majd a heti konzultációk
-során bevittem a tanszékre mind a m\H{u}szert mind a notebookomat és ott
-demonstráltam az eltelt hét során elért eredményeket.
+\begin{itemize}
+\item Az Entity egy gráf csúcsának feleltethetõ meg.
+\item A Relation pedig egy gráf két csúcsát összekötõ élnek.
+\end{itemize}
+
+A félév elején azért esett erre a keretrendszerre a választás, mert ha ezen a keretrendszeren sikerül jó modell összehasonlító / egyesítõ algoritmust alkotni, akkor egyrészt azt más keretrendszerre átültetni már nem lehet nagy komplexitású feladat, másrészt a VIATRA rendszerbe számos egyéb metamodellnek megfelelõ modell példányt lehet importálni (számos importer már most is rendelkezésre áll), valamint egy új importer megírása se jelenthet megoldhatatlanul nehéz feladatot.
 
 \section{Feladatok leírása}
 
-A labor során az els\H{o} célkit\H{u}zés az volt, hogy elkészüljön egy saját
-adatkábel a m\H{u}szerhez. A kábel használhatóságát a zárt forráskódú
-szoftverrel lehetett tesztelni. Ha megvolt a megfelel\H{o} kábel akkor
-vissza kellett fejteni a kommunikációs protokollját a m\H{u}szernek, és a
-cél egy saját (számunkra legalábbis) nyílt forráskódú szoftver
-fejlesztése volt, mellyel ugyanazokat az információkat le tudtuk
-kérdezni, mint a zárt forráskódú szoftverrel.
+A félév során megoldandó feladatokat a következõ részekre lehetett bontani:
 
-Amennyiben id\H{o} marad rá, a fogadás és feldolgozás után cél lenne egy
-olyan felhasználói interfész megalkotása, ahol a beteg megjegyzéseket
-f\H{u}zhet a mért eredményekhez. Így kés\H{o}bb például egy grafikon kiugró
-értékénél visszakereshet\H{o}, hogy a felhasználó milyen kommentárt f\H{u}zött
-az akkori méréshez, vagy korábbi mérési adatok kés\H{o}bb is
-visszakereshet\H{o}ek mikor a m\H{u}szer már nem tárolja \H{o}ket.
+\begin{itemize}
+\item Megismerkedni a modellek összehasonlításának és egyesítésének nehézségeivel
+\item Tanulmányozni a probléma megoldásához használható algoritmusokat
+\item Egy konkrét algoritmust portolni / implementálni a VIATRA2 rendszerben
+\item Tesztelhetõséget lehetõvé tenni
+\end{itemize}
 
 \section{Munkanapló}
 
+\subsection{Elsõ hét}
+
+Az Ericsson egy ipari esettanulmányából \cite{ericsson} kiderül, hogy miért is
+annyira égetõ probléma az, hogy sok esetben nincsenek megfelelõ eszközök
+modellek összehasonlításához és egyesítéséhez. A cikkben részletezik, hogy az
+Ericsson már alkalmazza a modellvezérelt fejlesztés technikáját, és bár
+összességében hatékonyabbnak tartja mint modellek nélkül fejleszteni, mégis
+nagy nehézséget jelent nekik, ha valamilyen konfliktust kapnak a modellek
+verziókezelése során. Ilyenkor egy \emph{merge szobának} keresztelt helységbe
+terelik a fejlesztõket, ott nagy képernyõkre kivetítik a modellek egyes
+verzióit, melyt megbeszélést tartanak arról, hogy mi is lehetne az egyesített
+verzió. Tehát annak ellenére, hogy a technológia növeli a költséghatékonyságot
+- állítja az Ericsson -, lenne még mit fejlõdni, azt gondolják, hogy megoldható
+lenne, hogy az ilyen modellegyesítési problémák nagyrésze vagy automatizálható
+lenne, vagy ha szoftveres támogatást kapnának hozzá a fejlesztõk akkor az ehhez
+hasonló konflikusfeloldások jóval egyszerûbbé válnának.
+
+\subsection{Második hét}
+
+A cikk elolvasása után továbbá világossá válik számunkra, hogy:
+
+\begin{itemize}
+\item A modellek egyesítésére várhatóan az elkövetkezendõ években egyre nagyobb igény lesz.
+\item A forráskódok egyesítéséhez használt algoritmusok nem használhatóak erre a problémára, leszámítva azon kevés eseteket, mikor a modelleket kézzel írjuk le, nem pedig valamilyen grafikus szerkesztõt használva.
+\item A probléma azért nehéz, mert az ideális megoldás bármilyen metamodellel rendelkezõ két modellpéldányon mûködne, a jelenleg elérhetõ megoldások pedig csak egyadott metamodellre adnak használható eredményt.
+\end{itemize}
+
+A konzultáción arra a következtetésre jutottunk, hogy alapvetõen két megközelítés lehetne sikeres:
+
+\begin{itemize}
+\item Figyelni, hogy milyen változtatásokat végeztek a fejlesztõk (pl. refactoring, Foo osztály átnevezése Bar-ra), majd az egyik modellen végrehajtani a másik modellen elvégzett mûveletek sorozatát, így kapva az egyesített eredményt, vagy
+\item Csak a kezdeti és végállapotot venni figyelembe pillatkép (snapshot) jelleggel, és arra egy 3-way merge megoldást készíteni.
+\end{itemize}
+
+Mindkét megoldásnak megvannak a maga elõnyei és hátrányai.
+
+Az elsõ megoldás elõnye, hogyha például egy adott osztály átnevezése 100 sor kód módosításával jár, a mûvelet tárolása (az eredményezett változtatások tárolása helyett) sokkal kompaktabb változáslistát eredményez. Hátránya, hogy nem feltétlenül felcserélhetõek az egyes mûveletek. Maradva az osztály átnevezési problémánál, ha \emph{A} fejlesztõ még a régi nevével hivatkozik egy hozzáadott kódsorban az osztályra, akkor azt az elõtt kell alkalmazni, hogy \emph{B} azt átnevezte. Ha \emph{A} is nevezett át osztályokat, és \emph{B} is adott hozzás kódsorokat melyek még a régi nevével hivatkoznak az osztályokra, akkor egy olyan triviális megoldás, mely csak egymásután egyszer \emph{A}, aztán \emph{B} (vagy fordítva) mûveleteit alkalmazza nem vezet megoldásra. Ha analógiát keresünk a forráskódokat verziózó rendszerekkel, a Darcs verziókezelõ ilyen algoritmussal rendelkezik. (Ott ezt a problémát úgy oldják meg, hogy az egyes változástípusok mögött precíz matematikai szemantika van, cserébe viszont a gyakorlatban ez nem mindig ad elfogadható gyorsaságú eredményt az algoritmus nagy komplexitása miatt.)
+
+A második megoldásnak a legszembetûnõbb elõnye, hogy nem érzékeny a változtatások számára, hiszen csak az elsõ és a végsõ állapotot veszi figyelembe. Természetesen cserébe ilyenkor gondjaink lehetnek abban az esetben ha a refactoring mértéke nem elhanyagolható az egyéb változtatásokhoz viszonyítva.
+
+Összességében tehát megállapíthatjuk, hogy minkét technika lehet sikeres, nem érdemes egyiket se elvetni.
+
 \subsection{Harmadik hét}
 
-Az Erlang környezettel kezdtem el ismerkedni, az angol könyv \cite{Programming Erlang}
-segítségével. Dokumentáció alapján való telepítés után a következ\H{o}
-témákkal ismerkedtem meg az Erlang nyelven belül: szekvenciális
-programozás, kivételkezelés, bit szintakszis.
+Zager és Verghese \cite{zager} cikkébõl kiderül, hogy a modellek összehasonlításának problémája megfeleltethetõ gráfok összehasonlításának \footnote{Feltéve, hogyha a pillanatkép-jellegû hozzáállást követjük.}. Ehhez a matematikának széles fegyvertára van, ugyanakkor heurisztikák nélkül a probléma túl nehéz ahhoz, hogy a gyakorlatban elfogadható idejû eredményt kapjunk. Egy heurisztika lehet egy iteratív algoritmus, melyben egy $ G_a $ és $ G_b $ gráfban lévõ pont akkor hasonló, ha a szomszédaik hasonlóak, az élek pedig akkor ha a forrás/cél pontok hasonlóak.
+
+A cikk részetesen foglalkozik azzal, hogy hogyan tudjuk megtalálni, hogy két gráfban hol vannak hasonló részek (similarity). A részgráfok esetén tervezési döntés, hogy a részben hasonlókkal vagy csak az izomorfakkal akarunk foglalkozni a párosítás kialakítása során (matching).
+
+Ohst, Welle és Kelter \cite{umlsimilarity} cikke konkrétan UML modellekkel foglalkozik. Kiemeli annak fontosságát, hogy ha két modellt összehasonlítunk, akkor az érdektelen adatokat figyelmen kívül kell hagyni, például az egyes modell elemek pozícióját (layout info). Foglalkozik a vizuális megjelenés prolémájával, erre mutat pozitív és negatív példát is. Kiemeli, hogy lényeges különbség lehet modellek között, hogy van-e az elemeknek egyedi azonosítójuk (UUID), ennek hiányában a probléma perfekt megoldása sajnálatos módon NP-teljes. Hivatkozik a Rational Rose termékre, melyben egyfelõl van modell összehasonlítási / egyesítési funkcionalitás, másrészt viszont az egyesítés során elõkerül a modell konkrét XML-alapú szintaxisa, ennek ismerete nélkül aligha tudunk sikeres egyesítéseket véghezvinni.
+
+Az idáigi cikkekbõl a következõ szempontok derültek ki az összehasonlító algoritmusokat illetõen:
+
+\begin{itemize}
+\item Történettel (history) foglalkozó / nem foglalkozó algoritmus
+\item Egyedi azonosítást lehetõvé tevõ elem létezése / nem létezése
+\item Az algoritmus metamodell-specifikus-e
+\item A fejlesztõ grafikus felületet kap-e vagy a konkrét szintaxist is ismernie kell
+\end{itemize}
 
 \subsection{Negyedik hét}
 
-Foglalkoztam a build környezet kialakításával, valamint a többszálú
-programozással. Ez azért lesz kés\H{o}bb fontos, mert a szálak is
-üzenetekkel kommunikálnak egymással, és a soros portot is majd így tudom
-olvasni. Ezen kívül beüzemeltem egy USB-{}soros átalakítót és evaluáltam a
-különböz\H{o} (serial, sl, serial\_gen) Erlang soros port drivereket. Végül a
-FAQ-{}ban is ajánlott \emph{serial} nev\H{u} driver mellett döntöttem.
 
-\subsection{Ötödik hét}
 
-Erlangban a párhuzamos programozással kapcsolatos hibakezelést néztem
-meg, valamint az elosztott programok készítését. Mivel még nem jutottam
-hozzá m\H{u}szerhez, a telefonomat használva teszt eszközként egy példa
-Erlang programot írtam amely szemlélteti a soros port kezelését a serial
-driver használatával.
-
-\subsection{Hatodik hét}
-
-Erlangban a C-{}ben írt driverek készítésének néztem utána, valamint a
-file-{}kezelés témakörét néztem meg. Erre azért lesz szükség, mert a mért
-adatokat tárolni kell majd, valamint valószín\H{u}síthet\H{o}, hogy a soros port
-drivere nem nyújt teljes funkcionalitást, és ebben az esetben -{} vagy
-hibakeresés céljából a soros port driverbe is bele kell nyúlni.
-
-\subsection{Hetedik hét}
-
-A konzulessel megbeszéltük, hogy egy vérnyomás-{} és vércukor-{}mér\H{o} m\H{u}szert
-fogok kezelni, amihez van egy kereskedelmi program, de adatkábel nincs,
-így azt nekem kell elkészíteni. Megtaláltam az audió kábel
-kiosztását (m\H{u}szer fel\H{o}li vég), a a soros port kiosztását 
-(számítógép fel\H{o}li vég), és ekkor már össze tudtam forrasztani az
-adatkábelt.
-
-\subsection{Nyolcadik hét}
-
-A kábelt összeforrasztottam, a kereskedelmi programot megkaptam a
-m\H{u}szerhez, és azzal sikerült is lekérni a korábban mért, és a m\H{u}szer
-által mért adatokat. De ez a módszer meglehet\H{o}sen kényelmetlen, a zárt
-forrású program csak Windows rendszeren érhet\H{o} el, így külön virtuális
-gépben kellett tesztelni. Mivel mi hordozható, és igényeink szerint
-integrálható hozzáférést szeretnénk, a következ\H{o} lépés saját a m\H{u}szer
-kommunikációs protokolljának visszafejtése lesz.
-
-\subsection{Kilencedik hét}
-
-Az után kutattam, hogy a kereskedelmi program adat-{}letöltési
-funkciójának használata közben hogyan lehetne sniffelni a soros port
-forgalmát, de csak addig sikerült eljutni, hogy szoftveres megoldást
-fogok használni, nem hardware-{}eset.
-
-\subsection{Tizedik hét}
-
-Sikerült megfelel\H{o} szoftveres megoldást találni. A sniffelést a
-virtuális gépen végzem két szoftver használatával. A VSPE létrehoz
-egy virtuális portot, majd a SerialMon beépül a virtuális és a valós
-port közé a klasszikus man-{}in-{}the-{}middle módszerrel.
-
-Eljutottam oda, hogy tudom, hogy hogyan kell megszólítani a m\H{u}szert,
-valamint milyen módon íródik le, hogy melyik mérési eredmény melyik
-adatára vagyok kíváncsi. A tényleges adatok négyszer 2 byte-{}on érkeznek,
-de a tartalmuk még rejtély.
-
-\subsection{Tizenegyedik hét}
-
-Sikerült megfejteni a konzulens segítségével az összes 2 byte-{}os adat
-tartalmát (mérés id\H{o}pontja, típusa, mért adatok). A következ\H{o} lépés egy
-prototípus készítése lesz amely demonstrálja, hogy jól sikerült
-visszafejteni a protokollt.
-
-\subsection{Tizenkettedik hét}
-
-Elkészítettem a prototípust Python nyelven.
-
-\subsection{Tizenharmadik hét}
-
-Kiderült, hogy annak ellenére, hogy a telefont meg tudom szólítani
-Erlangból, a m\H{u}szert sajnos nem pont ugyanígy kell kezelni, így az
-Erlang verzióval nem készültem el ezen a héten, a jöv\H{o} hétre marad.
-
-\subsection{Tizennegyedik hét}
-
-Elkészült az Erlang verzió.
-
-\section{Jöv\H{o}beli lehet\H{o}ségek}
-
-A fogadott adatokat feldolgozás után célszer\H{u} lenne valamilyen
-adatbázisban tárolni. A jöv\H{o}ben többfajta m\H{u}szert is be lehetne kötni a
-rendszerbe. A felhasználói interfészen lehet\H{o}ség volna olyan adatok
-bevitelére amit a felhasználó a m\H{u}szeren nem adhat meg, pl. közérzet a
-mérés id\H{o}pontjában. Az Erlang adta lehet\H{o}ségeket kihasználva elosztott
-rendszert készíthetnénk, tehát a m\H{u}szerrel kommunikáló és az adatokat
-tároló folyamat nem feltétlenül kéne, hogy egy gépen fusson.
-
+\section{Jövõbeli lehetõségek}
 
 \begin{thebibliography}{4}
-\addcontentsline{toc}{section}{Hivatkoz\'asok}
+\addcontentsline{toc}{section}{Hivatkozások}
 
-\bibitem{Programming Erlang} Joe Armstrong: Programming Erlang, http://www.p.com/jaerlang/programming
+%\bibitem{Programming Erlang} Joe Armstrong: Programming Erlang, http://www.p.com/jaerlang/programming
+\bibitem{VIATRA} VIATRA2 (VIsual Automated model TRAnsformations), http://wiki.eclipse.org/VIATRA2
+\bibitem{ericsson} Lars Bendix, Pär Emanuelsson: Requirements for Practical Model Merge - An Industrial Perspective
+\bibitem{zager} LA Zager, GC Verghese: Graph similarity scoring and matching
+\bibitem{umlsimilarity} D Ohst, M Welle, U Kelter: Differences between versions of UML diagrams
 
 \end{thebibliography}
 \end{document}
