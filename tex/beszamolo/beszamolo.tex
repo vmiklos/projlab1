@@ -9,6 +9,7 @@
   \csname @@end\endcsname \fi
 \usepackage[latin2]{inputenc}
 \usepackage{setspace}
+\usepackage{float}
 \usepackage[T1]{fontenc} %\showhyphens{integetnem} \showhyphens{meggyültetvény}
 %\usepackage{ucs}\usepackage[utf8x]{inputenc}
 %\usepackage{fullpage} %\usepackage[margin=2cm]{geometry}
@@ -322,13 +323,13 @@ bonyolult, egyszerûen csak végrehajtja a mûveleteket a bemenetrõl. Az érdekes
 rész a diffxml.
 
 A FMES algoritmusnak a precíz leírása megtalálható hivatkozások
-között\cite{fmes}. Az algoritmus alapötlete egy iteratív megoldás, mely a
-következõ oldalon látható. Definiált egy két csomópontot összehasonlító
-függvény. A fa levelei közül megkeressük azokat, melyek megegyeznek és azonos
-útvonalon elérhetõek. Ha ezzel megvagyunk, a maradék levelek között keressünk
-olyan egyezõ csomópontokat melyek eltérõ útvonalon érhetõek el, de megegyeznek.
-Ezután tekintsük azt a gráfot, melyet a levelek elhagyásával kapunk. Futtassuk
-erre iteratív módon újfent az algoritmust.
+között\cite{fmes}. Az algoritmus alapötlete egy iteratív megoldás, mely az
+alfejezet végén került illusztrálásra.  Definiált egy két csomópontot
+összehasonlító függvény. A fa levelei közül megkeressük azokat, melyek
+megegyeznek és azonos útvonalon elérhetõek. Ha ezzel megvagyunk, a maradék
+levelek között keressünk olyan egyezõ csomópontokat melyek eltérõ útvonalon
+érhetõek el, de megegyeznek.  Ezután tekintsük azt a gráfot, melyet a levelek
+elhagyásával kapunk. Futtassuk erre iteratív módon újfent az algoritmust.
 
 \begin{figure}[H]
 \centering
@@ -366,6 +367,35 @@ erre iteratív módon újfent az algoritmust.
 \caption{Második iteráció: párosítás eltérõ úton}
 \end{figure}
 
+\subsection{Nyolcadik hét}
+
+Az FMES portolása VIATRA-hoz, a párosítás rész már mûködik. A párosítás és a
+két modell alapján a következõ lépés a szerkesztési szöveg elõállítása lenne
+Ebbõl már mûködik a beillesztõ és a törlést biztosító rész.
+
+Egy egyszerû modellre a kimenet a következõ:
+
+\begin{verbatim}
+origin.a matches working.a
+origin.a.b matches working.a.b
+origin.a.x unmatched
+origin.a.z matches working.a.z
+origin.a.b.y matches working.a.b.y
+
+working.a matches origin.a
+working.a.X unmatched
+working.a.b matches origin.a.b
+working.a.z matches origin.a.z
+working.a.b.y matches origin.a.b.y
+
+Applying: <insert name="X" parent="a"/>
+Applying: <delete node="a.x"/>
+\end{verbatim}
+
+Az implementáció\cite{fmes4viatra} két legfontosabb hiányossága, hogy nincsenek
+kezelve az áthelyezések, valamint a relációkat nem veszi figyelembe a két
+csúcsot összehasonlító függvény.
+
 \section{Jövõbeli lehetõségek}
 
 \begin{thebibliography}{4}
@@ -391,6 +421,7 @@ erre iteratív módon újfent az algoritmust.
 \bibitem{eclipseforum} EMF Compare: How to use EMF Compare in Java, http://www.eclipse.org/ forums/ index.php ?t=msg\&th=37716 \&goto=122763\#msg\_122763
 \bibitem{diffxml} Adrian Mouat: Tools for comparing and patching XML files, http://prdownloads .sourceforge.net/ diffxml/dissertation.ps ?download
 \bibitem{fmes} Sudarshan S. Chawathe, Anand Rajaraman, Hector Garcia-Molina, Jennifer Widom: Change Detection in Hierarchically Structured Information
+\bibitem{fmes4viatra} Saját kód: FMES VIATRA rendszerre, https://svn.inf.mit.bme.hu/ viatra/viatra\_extra/ R3/mit.bme.hu/ trunk/org.eclipse.viatra2.model.comparator/ src/org/ eclipse/viatra2/ model/comparator/ algorithms/vmiklos/fmes/
 
 \end{thebibliography}
 \end{document}
