@@ -83,16 +83,9 @@ Szolgáltatásbiztos rendszertervezés szakirány
 
 \section{Bevezetés}
 
-A BME Hibatûrõ rendszerek kutatócsoportjában arra keresem a választ, hogy
-lehetséges-e általános megoldást adni modellek összehasonlítására (compare)
-és egyesítésére (merge).
-
-Modell alatt a modellvezérelt szoftverfejlesztés keretében egészen pontosan
-olyan gráfokat értünk, mely valamilyen formátumnak (UML, EMF, VIATRA, stb.)
-megfelelnek, és egy adott szoftver magas szintû mûködését írják le.
-
-A modellek napjainkban kulcsfontosságú szerepet töltenek be a modellvezérelt szoftverfejlesztés folyamatában. A modellvezérelt fejlesztés alapötlete, hogy minél kevesebb programkódot írjunk meg közvetlenül, és minél több esetben egy modellbõl generáljuk azt. Ennek számos elõnye van:
-
+A modellvezérelt fejlesztés alapötlete, hogy szoftverek fejlesztése során
+minél kevesebb programkódot írjunk meg közvetlenül, és minél több esetben egy
+modellbõl generáljuk azt.  Ennek számos elõnye van:
 \begin{itemize}
 \item Ha a kódgenerátor rendelkezik valamilyen tanusítvánnyal, akkor helyes modell esetén a generált kód is automatikusan megfelel adott elvárásoknak.
 \item A modellek magasabb szintû leírást tesznek lehetõvé, mint ha közvetlenül a program forráskódját írnánk.
@@ -100,15 +93,45 @@ A modellek napjainkban kulcsfontosságú szerepet töltenek be a modellvezérelt szo
 \item Forráskód esetében a formális ellenõrzés nehézkes, míg mérnöki modellekbõl jóval egyszerûbb olyan matematikai modelleket elõállítani, melyeken már formális ellenõrzést végezhetünk.
 \end{itemize}
 
-A tanszéken fejlesztett VIATRA (VIsual Automated model TRAnsformations) \cite{VIATRA} keretrendszer is ilyen modellekkel dolgozik. A VIATRA modellreprezentációja meglehetõsen egyszerû, a modellek elemei a ModellElementek, és ezeknek két típusa van:
+E paradigma egyik égetõ problémája, hogy míg hagyományos fejlesztés során a
+forráskód verziókezelése (összehasonlítás és egyesítés) megoldott, addig
+modellek esetén erre a célra még nem érhetõek el a gyakorlatban is jól
+használható általános eszközök.
 
+A félév során megvalósított megoldás során olyan elérhetõ eredményekre kívánunk
+támaszkodni, melyek elméleti háttere tudományos cikk formájában elérhetõ,
+valamint hozzáférhetõ a ténylegesen megvalósított szoftver kódja.
+
+Az elkészült megvalósítás, mint azt késõbb látni fogjuk egy modell két
+pillanatkép-szerû (snapshot) verzióját hasonlítja össze, és gráfokon belül
+fákon mûködik.
+
+A dokumentum a továbbiakban a következõ részekre tagolható. E fejezet maradék
+része rövid bevezetést ad a VIATRA2 keretrendszerbe, valamint a félév során
+megoldandó feladatra. A második fejezet megvalósítást megelõzõ irodalomkutatás
+eredményeit részletezi. A harmadik fejezetben ismertetésre kerül az FMES
+algoritmus. A negyedik fejezet fejti ki az implementáció részleteit. A
+dokumentum végét a tesztelésrõl és jõvõbeli lehetõségekrõl szóló fejezetek
+alkotják.
+
+\subsection{A VIATRA keretrendszer}
+A tanszéken fejlesztett VIATRA (VIsual Automated model TRAnsformations)
+\cite{VIATRA} keretrendszer is ilyen modellekkel dolgozik. A VIATRA
+modellreprezentációja meglehetõsen egyszerû, a modellek elemei a
+ModellElementek, és ezeknek két típusa van:
 \begin{itemize}
 \item Az Entity egy gráf csúcsának feleltethetõ meg.
 \item A Relation pedig egy gráf két csúcsát összekötõ élnek.
 \end{itemize}
+A félév elején azért esett erre a keretrendszerre a választás, mert ha ezen a
+keretrendszeren sikerül jó modell összehasonlító / egyesítõ algoritmust
+alkotni, akkor egyrészt azt más keretrendszerre átültetni már nem lehet nagy
+komplexitású feladat, másrészt a VIATRA rendszerbe számos egyéb metamodellnek
+megfelelõ modell példányt lehet importálni (számos importer már most is
+rendelkezésre áll), valamint egy új importer megírása se jelenthet
+megoldhatatlanul nehéz feladatot.
 
-A félév elején azért esett erre a keretrendszerre a választás, mert ha ezen a keretrendszeren sikerül jó modell összehasonlító / egyesítõ algoritmust alkotni, akkor egyrészt azt más keretrendszerre átültetni már nem lehet nagy komplexitású feladat, másrészt a VIATRA rendszerbe számos egyéb metamodellnek megfelelõ modell példányt lehet importálni (számos importer már most is rendelkezésre áll), valamint egy új importer megírása se jelenthet megoldhatatlanul nehéz feladatot.
-
+\subsection{Megoldandó feladatok}
 A félév során megoldandó feladatokat a következõ részekre lehetett bontani:
 
 \begin{itemize}
