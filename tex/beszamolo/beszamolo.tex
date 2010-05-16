@@ -405,13 +405,11 @@ bonyolult, egyszerûen csak végrehajtja a mûveleteket a bemenetrõl. Az érdekes
 rész a diffxml.
 
 A FMES algoritmusnak a precíz leírása megtalálható hivatkozások
-között\cite{fmes}. Az algoritmus alapötlete egy iteratív megoldás, mely az
-alfejezet végén került illusztrálásra.  Definiált egy két csomópontot
-összehasonlító függvény. A fa levelei közül megkeressük azokat, melyek
-megegyeznek és azonos útvonalon elérhetõek. Ha ezzel megvagyunk, a maradék
-levelek között keressünk olyan egyezõ csomópontokat melyek eltérõ útvonalon
-érhetõek el, de megegyeznek.  Ezután tekintsük azt a gráfot, melyet a levelek
-elhagyásával kapunk. Futtassuk erre iteratív módon újfent az algoritmust.
+között\cite{fmes}. Az algoritmus alapötlete egy iteratív megoldás, mely a következõ módon valósul meg:
+Definiált egy két csomópontot
+összehasonlító függvény.
+
+Megkeressük a fa leveleit:
 
 \begin{figure}[H]
 \centering
@@ -419,11 +417,18 @@ elhagyásával kapunk. Futtassuk erre iteratív módon újfent az algoritmust.
 \caption{A fa leveleinek keresése}
 \end{figure}
 
+Ezek közül megkeressük azokat, melyek
+megegyeznek és azonos útvonalon elérhetõek:
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=40mm,keepaspectratio]{fmes/fmes3.eps}
 \caption{Párosítás egyezõ úton}
 \end{figure}
+
+Ha ezzel megvagyunk, a maradék
+levelek között keressünk olyan egyezõ csomópontokat melyek eltérõ útvonalon
+érhetõek el, de megegyeznek:
 
 \begin{figure}[H]
 \centering
@@ -431,10 +436,16 @@ elhagyásával kapunk. Futtassuk erre iteratív módon újfent az algoritmust.
 \caption{Párosítás eltérõ úton}
 \end{figure}
 
+Ezután tekintsük azt a gráfot, melyet a már párosított pontok elhagyásával
+kapunk, és keressük meg ennek a leveleit:
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=40mm,keepaspectratio]{fmes/fmes5.eps}
 \caption{Második iteráció: levél-keresés}
+
+Futtassuk erre iteratív módon újfent az algoritmust, tehát keressük meg az
+azonos úton elérhetõ egyezõ leveleket:
 
 \end{figure}
 \begin{figure}[H]
@@ -443,11 +454,15 @@ elhagyásával kapunk. Futtassuk erre iteratív módon újfent az algoritmust.
 \caption{Második iteráció: párosítás egyezõ úton}
 \end{figure}
 
+Majd keressük meg az eltérõ úton elérhetõ egyezõ leveleket:
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=40mm,keepaspectratio]{fmes/fmes7.eps}
 \caption{Második iteráció: párosítás eltérõ úton}
 \end{figure}
+
+Az iteráció folytatható egészen a gyökérelemig.
 
 \section{Implementáció}
 
