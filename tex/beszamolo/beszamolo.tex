@@ -295,7 +295,7 @@ Ezt követõen a VIATRA Java API-jával ismerkedtem, ennek keretében elkészült egy 
 
 \subsection{Odyssey-VCS}
 
-Ezzel párhuzamosan megpróbáltam felvenni a kapcsolatot az \emph{Odyssey-VCS}\cite{odyssey} szerzõivel, melynek célja egy modellek kezelésére kitalált EMF-alapó verziókezelõ lenne. Sajnálatos módon a szoftver elsó blikkre (out of the box) nem mûködött, a forráskódot meg többszöri levélváltás után se sikerült végül megkapni, bár határozott elutasítást nem kaptam (kutatási célokra).
+Ezzel párhuzamosan megpróbáltam felvenni a kapcsolatot az \emph{Odyssey-VCS}\cite{odyssey} szerzõivel, melynek célja egy modellek kezelésére kitalált EMF-alapú verziókezelõ lenne. Sajnálatos módon a szoftver elsõ blikkre (out of the box) nem mûködött, a forráskódot meg többszöri levélváltás után se sikerült végül megkapni, bár határozott elutasítást nem kaptam (kutatási célokra).
 
 \subsection{EMF Compare}
 
@@ -580,6 +580,29 @@ csak el a VIATRA felett futó kód. Ennek leginkább akkor volt jelentõsége, mikor 
 lehetnek, de jelenleg nem használtak", törlésre kerültek.
 \item Az xmlimporter kód esetén nem voltak hosszú használatlan kódrészek, de a dokumentáció hiányzott, ezt elkészítettem hozzá.
 \end{itemize}
+
+Az összehasonlító osztályainak viszonya a következõképpen alakul. A végrehajtás
+az \emph{Fmes Model Comparator} osztályból indul, ez egy párosítást végez az
+\emph{Match.easyMatch()} hívással majd létrehozza egy \emph{EditScript}
+példányt a párosítás eredménye alapján. Az \emph{easyMatch()} a párokat egy
+\emph{ModelElement Pairs} osztályban tárolja, a párosítás során az egyes
+elemeket a mélységükkel együtt egy \emph{ModelElement Depth} osztályba
+csomagolja. Ezen osztályok rendezését valósítja meg a
+\emph{ModelElement DepthComparator} osztály. Fontos még a
+\emph{Match.compare ModelElements()} metódus, mely az egyes elemek
+összehasonlítását végzi, és ahol jelenleg a típusellenõrzés hiányzik.
+Visszatérve a kiinduló osztályunkhoz, az \emph{EditScript .create()} metódus
+végzi el a tényleges szerkesztõ script létrehozását. Ennek során egy
+változáslistát jelképezõ \emph{IDelta} interfészt megvalósító \emph{DULDelta}
+osztály metódusait kell meghívni. A lista építése során szükségünk van egy
+olyan FIFO-ra, melynél nem csak adott csomópontot, hanem kizárólag annak
+gyerekeit is hozzá tudjuk adni, ezt valósítja meg a \emph{ModelElement Fifo}
+osztály. A \emph{DULDelta} hívások során (beillesztés, törlés, áthelyezés) az
+keletkezõ XML-beli konkrét stringek külön, a \emph{DULConstants} osztályban
+találhatók meg, valamint minden egyes lépésben a keletkezõ XML új eleme a
+standard kimeneten is megjelenik, ezt végzi a \emph{DOMOps} osztály. Ezen kívül
+már csak a hibakezelést megvalósító \emph{Delta Initialisation Exception} és
+\emph{Document Creation Exception} osztályok maradtak.
 
 Ezen kívül elkészítettem a labor végén esedékes prezentáció fóliáit.
 
