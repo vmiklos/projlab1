@@ -105,8 +105,6 @@ A tanszéken fejlesztett VIATRA (VIsual Automated model TRAnsformations) \cite{VI
 
 A félév elején azért esett erre a keretrendszerre a választás, mert ha ezen a keretrendszeren sikerül jó modell összehasonlító / egyesítõ algoritmust alkotni, akkor egyrészt azt más keretrendszerre átültetni már nem lehet nagy komplexitású feladat, másrészt a VIATRA rendszerbe számos egyéb metamodellnek megfelelõ modell példányt lehet importálni (számos importer már most is rendelkezésre áll), valamint egy új importer megírása se jelenthet megoldhatatlanul nehéz feladatot.
 
-\section{Feladatok leírása}
-
 A félév során megoldandó feladatokat a következõ részekre lehetett bontani:
 
 \begin{itemize}
@@ -116,9 +114,59 @@ A félév során megoldandó feladatokat a következõ részekre lehetett bontani:
 \item Tesztelhetõséget lehetõvé tenni
 \end{itemize}
 
-\section{Munkanapló}
+\section{Háttérismeret}
 
-\subsection{Elsõ hét}
+Tekintve, hogy a modellvezérelt szoftverfejlesztés témakörében nem voltam
+jártas a félév során, kézenfekvõnek tûnt, hogy mielõtt nekiállnék egy saját
+megoldás elkészítésének, elõször az ide vonatkozó szakirodalmat áttekintsem.
+Rövidesen kiderült, hogy modellek összehasonlításával, vagy ennél
+általánosabban gráfok izomorfiájának vizsgálatával már nagyon sokan
+foglalkoztak, ezekbõl igyekeztem a gyakrabban elõforduló problémákkal
+megismerkedni, illetve az ezekre adható megoldásokat megismerni.
+
+A félév során olvasott cikkek, illetve kipróbált szoftverek részletes leírása
+elõtt hasonlítsuk össze elõször röviden a cikkeket:
+
+\begin{center}
+\begin{table}[H]
+\begin{tabular}{| l | l | p{10cm} |}
+\hline
+Cikk & Típus & Rövid leírás \\ \hline
+\cite{ericsson} & probléma leírás & Rávilágít arra, hogy a modellek összehasonlítása mennyivel bonyolultabb, mint a forráskódoké. \\
+\cite{zager} & konkrét eredmény & Egy megoldást ad arra, hogy gráfok hasonlóságát hogyan lehet mérni. \\
+\cite{umlsimilarity} & probléma leírás & Szûkítve a témakört, UML modellek összehasonlításának nehézségeit részletezi. \\
+\cite{graphsimilarity} & prezentáció & Nem tartalmaz probléma-leírást vagy megoldást, lehetséges megoldások típusait vázolja. \\
+\cite{zagermsc} & konkrét eredmény & Lényegében a \cite{zager} cikk késõbbi verziója, jelentõsen bõvítve és továbbgondolva. \\
+\cite{dsmdiff} & probléma leírás & Felveti, hogy fontos, hogy egy összehasonlító algoritmus bármilyen metamodell fölött mûködni tudjon. \\
+\cite{comparechal} & probléma leírás & Modellek összehasonlítását a verziókezelõk oldaláról közelíti meg. \\
+\cite{xdiff} & konkrét eredmény & A késõbb tárgyalt FMES algoritmushoz hasonló megoldást ismertet. \\
+\cite{odyssey} & konkrét eredmény & Egy modellek kezelésére kifejlesztett verziókezelõ. \\
+\cite{changedriven} & konkrét eredmény & A változás-vezérelt összehasonlításra egy lehetséges megoldás. \\
+\hline
+\end{tabular}
+\caption{A félév során olvasott cikkek összehasonlítása}
+\end{table}
+\end{center}
+
+\clearpage
+Valamint ez egyes szoftvereket:
+
+\begin{center}
+\begin{table}[H]
+\begin{tabular}{| l | l | p{10cm} |}
+\hline
+Szoftver & Állapot & Rövid leírás \\ \hline
+\cite{VIATRA} & Aktívan fejlesztett & Konkrét mûködõ modell-összehasonlító algoritmust nem tartalmaz, de van rá lehetõség \\
+\cite{emfcompare} & Aktívan fejelsztett & Mûködõ algoritmust tartalmaz, de csak EMF metamodellel mûködik \\
+\cite{groove} & Aktívan fejlesztett & Objektum-orientált verifikálás céljából kezel gráfokat, gráf-összehasonlító megoldást tartalmaz. \\
+\cite{diffxml} & Karbantartott & 2002-ben fejlesztett eszköz, mely séma nélküli XML fájlokat hasonlít össze és egyesít. \\
+\hline
+\end{tabular}
+\caption{A félév során kipróbált szoftverek összehasonlítása}
+\end{table}
+\end{center}
+
+\subsection{Ericsson}
 
 Az Ericsson egy ipari esettanulmányából \cite{ericsson} kiderül, hogy miért is
 annyira égetõ probléma az, hogy sok esetben nincsenek megfelelõ eszközök
@@ -135,8 +183,6 @@ lenne, hogy az ilyen modellegyesítési problémák nagyrésze vagy automatizálható
 lenne, vagy ha szoftveres támogatást kapnának hozzá a fejlesztõk akkor az ehhez
 hasonló konflikusfeloldások jóval egyszerûbbé válnának.
 
-\subsection{Második hét}
-
 A cikk elolvasása után továbbá világossá válik számunkra, hogy:
 
 \begin{itemize}
@@ -149,26 +195,28 @@ A konzultáción arra a következtetésre jutottunk, hogy alapvetõen két megközelíté
 
 \begin{itemize}
 \item Figyelni, hogy milyen változtatásokat végeztek a fejlesztõk (pl. refactoring, Foo osztály átnevezése Bar-ra), majd az egyik modellen végrehajtani a másik modellen elvégzett mûveletek sorozatát, így kapva az egyesített eredményt, vagy
-\item Csak a kezdeti és végállapotot venni figyelembe pillatkép (snapshot) jelleggel, és arra egy 3-way merge megoldást készíteni.
+\item Csak a kezdeti és végállapotot venni figyelembe pillanatkép (snapshot) jelleggel, és arra egy 3-way merge megoldást készíteni.
 \end{itemize}
 
 Mindkét megoldásnak megvannak a maga elõnyei és hátrányai.
 
-Az elsõ megoldás elõnye, hogyha például egy adott osztály átnevezése 100 sor kód módosításával jár, a mûvelet tárolása (az eredményezett változtatások tárolása helyett) sokkal kompaktabb változáslistát eredményez. Hátránya, hogy nem feltétlenül felcserélhetõek az egyes mûveletek. Maradva az osztály átnevezési problémánál, ha \emph{A} fejlesztõ még a régi nevével hivatkozik egy hozzáadott kódsorban az osztályra, akkor azt az elõtt kell alkalmazni, hogy \emph{B} azt átnevezte. Ha \emph{A} is nevezett át osztályokat, és \emph{B} is adott hozzás kódsorokat melyek még a régi nevével hivatkoznak az osztályokra, akkor egy olyan triviális megoldás, mely csak egymásután egyszer \emph{A}, aztán \emph{B} (vagy fordítva) mûveleteit alkalmazza nem vezet megoldásra. Ha analógiát keresünk a forráskódokat verziózó rendszerekkel, a Darcs verziókezelõ ilyen algoritmussal rendelkezik. (Ott ezt a problémát úgy oldják meg, hogy az egyes változástípusok mögött precíz matematikai szemantika van, cserébe viszont a gyakorlatban ez nem mindig ad elfogadható gyorsaságú eredményt az algoritmus nagy komplexitása miatt.)
+Az elsõ megoldás elõnye, hogyha például egy adott osztály átnevezése 100 sor kód módosításával jár, a mûvelet tárolása (az eredményezett változtatások tárolása helyett) sokkal kompaktabb változáslistát eredményez. Hátránya, hogy nem feltétlenül felcserélhetõek az egyes mûveletek. Maradva az osztály átnevezési problémánál, ha \emph{A} fejlesztõ még a régi nevével hivatkozik egy hozzáadott kódsorban az osztályra, akkor azt az elõtt kell alkalmazni, hogy \emph{B} azt átnevezte. Ha \emph{A} is nevezett át osztályokat, és \emph{B} is adott hozzá kódsorokat melyek még a régi nevével hivatkoznak az osztályokra, akkor egy olyan triviális megoldás, mely csak egymásután egyszer \emph{A}, aztán \emph{B} (vagy fordítva) mûveleteit alkalmazza nem vezet megoldásra. Ha analógiát keresünk a forráskódokat verziózó rendszerekkel, a Darcs verziókezelõ ilyen algoritmussal rendelkezik. (Ott ezt a problémát úgy oldják meg, hogy az egyes változástípusok mögött precíz matematikai szemantika van, cserébe viszont a gyakorlatban ez nem mindig ad elfogadható gyorsaságú eredményt az algoritmus nagy komplexitása miatt.)
 
-A második megoldásnak a legszembetûnõbb elõnye, hogy nem érzékeny a változtatások számára, hiszen csak az elsõ és a végsõ állapotot veszi figyelembe. Továbbá ez az egyetlen lehetõségünk ha gyorsan szeretnénk az összehasonlítást elvégezni és a modell szerkesztõ nem támogatja az operációk rögzítését.Természetesen cserébe ilyenkor gondjaink lehetnek abban az esetben ha a refactoring mértéke nem elhanyagolható az egyéb változtatásokhoz viszonyítva. (Forráskód kezelésénél a Git rendszer alapértelmezett egyesítõ algoritmusa ilyen: olyankor is adhat konfliktust mikor az operációk rögzítésével az egyesítés automatizálható lenne, viszont az egyesítõ algoritmus gyorsaságával szemmel láthatólag nincsenek gondok.)
+A második megoldásnak a legszembetûnõbb elõnye, hogy nem érzékeny a változtatások számára, hiszen csak az elsõ és a végsõ állapotot veszi figyelembe. Továbbá ez az egyetlen lehetõségünk ha gyorsan szeretnénk az összehasonlítást elvégezni és a modell szerkesztõ nem támogatja az operációk rögzítését. Természetesen cserébe ilyenkor gondjaink lehetnek abban az esetben ha a refactoring mértéke nem elhanyagolható az egyéb változtatásokhoz viszonyítva. (Forráskód kezelésénél a Git rendszer alapértelmezett egyesítõ algoritmusa ilyen: olyankor is adhat konfliktust mikor az operációk rögzítésével az egyesítés automatizálható lenne, viszont az egyesítõ algoritmus gyorsaságával szemmel láthatólag nincsenek gondok.)
 
 Összességében tehát megállapíthatjuk, hogy minkét technika lehet sikeres, nem érdemes egyiket se elvetni.
 
-\subsection{Harmadik hét}
+\subsection{Gráfok hasonlóságának mérése}
 
 Zager és Verghese \cite{zager} cikkébõl kiderül, hogy a modellek összehasonlításának problémája megfeleltethetõ gráfok összehasonlításának \footnote{Feltéve, hogyha a pillanatkép-jellegû hozzáállást követjük.}. Ehhez a matematikának széles fegyvertára van, ugyanakkor heurisztikák nélkül a probléma túl nehéz ahhoz, hogy a gyakorlatban elfogadható idejû eredményt kapjunk. Egy heurisztika lehet egy iteratív algoritmus, melyben egy $ G_a $ és $ G_b $ gráfban lévõ pont akkor hasonló, ha a szomszédaik hasonlóak, az élek pedig akkor ha a forrás/cél pontok hasonlóak.
 
-A cikk részetesen foglalkozik azzal, hogy hogyan tudjuk megtalálni, hogy két gráfban hol vannak hasonló részek (similarity). A részgráfok esetén tervezési döntés, hogy a részben hasonlókkal vagy csak az izomorfakkal akarunk foglalkozni a párosítás kialakítása során (matching).
+A cikk részletesen foglalkozik azzal, hogy hogyan tudjuk megtalálni, hogy két gráfban hol vannak hasonló részek (similarity). A részgráfok esetén tervezési döntés, hogy a részben hasonlókkal vagy csak az izomorfakkal akarunk foglalkozni a párosítás kialakítása során (matching).
 
-Ohst, Welle és Kelter \cite{umlsimilarity} cikke konkrétan UML modellekkel foglalkozik. Kiemeli annak fontosságát, hogy ha két modellt összehasonlítunk, akkor az érdektelen adatokat figyelmen kívül kell hagyni, például az egyes modell elemek pozícióját (layout info). Foglalkozik a vizuális megjelenés prolémájával, erre mutat pozitív és negatív példát is. Kiemeli, hogy lényeges különbség lehet modellek között, hogy van-e az elemeknek egyedi azonosítójuk (UUID), ennek hiányában a probléma perfekt megoldása sajnálatos módon NP-teljes. Hivatkozik a Rational Rose termékre, melyben egyfelõl van modell összehasonlítási / egyesítési funkcionalitás, másrészt viszont az egyesítés során elõkerül a modell konkrét XML-alapú szintaxisa, ennek ismerete nélkül aligha tudunk sikeres egyesítéseket véghezvinni.
+\subsection{UML modellek hasonlósága}
 
-Az idáigi cikkekbõl a következõ szempontok derültek ki az összehasonlító algoritmusokat illetõen:
+Ohst, Welle és Kelter \cite{umlsimilarity} cikke konkrétan UML modellekkel foglalkozik. Kiemeli annak fontosságát, hogy ha két modellt összehasonlítunk, akkor az érdektelen adatokat figyelmen kívül kell hagyni, például az egyes modell elemek pozícióját (layout info). Foglalkozik a vizuális megjelenés problémájával, erre mutat pozitív és negatív példát is. Kiemeli, hogy lényeges különbség lehet modellek között, hogy van-e az elemeknek egyedi azonosítójuk (UUID), ennek hiányában a probléma perfekt megoldása sajnálatos módon NP-teljes. Hivatkozik a Rational Rose termékre, melyben egyfelõl van modell összehasonlítási / egyesítési funkcionalitás, másrészt viszont az egyesítés során elõkerül a modell konkrét XML-alapú szintaxisa, ennek ismerete nélkül aligha tudunk sikeres egyesítéseket véghezvinni.
+
+Az eddigi cikkekbõl a következõ szempontok derültek ki az összehasonlító algoritmusokat illetõen:
 
 \begin{itemize}
 \item Történettel (history) foglalkozó / nem foglalkozó algoritmus
@@ -177,15 +225,17 @@ Az idáigi cikkekbõl a következõ szempontok derültek ki az összehasonlító algorit
 \item A fejlesztõ grafikus felületet kap-e vagy a konkrét szintaxist is ismernie kell
 \end{itemize}
 
-\subsection{Negyedik hét}
+\subsection{Gráfok hasonlóságainak típusai}
 
 Gráfok hasonlóságának alapkérdéseivel foglalkozik Zager és Verghese prezentációja \cite{graphsimilarity}, melyben a hasonlóság következõ fajtáit határozzák meg:
 
 \begin{itemize}
 \item Izomorfia (csak igen/nem a válasz)
-\item Szerkeszétsi távolság: hány lépés kell ahhoz, hogy az egyik gráfból eljussunk a másikba.
+\item Szerkesztési távolság: hány lépés kell ahhoz, hogy az egyik gráfból eljussunk a másikba.
 \item Maximális / minimális mérete a részgráfoknak / szupergráfnak
 \end{itemize}
+
+\subsection{Gráfok párosítása}
 
 Zager MSc dolgozata \cite{zagermsc} a következõ újdonságokkal szolgál:
 
@@ -194,11 +244,16 @@ Zager MSc dolgozata \cite{zagermsc} a következõ újdonságokkal szolgál:
 \item A feljebb említett iteratív hasonlóság-keresõ módszerét itt részletesen kifejti.
 \end{itemize}
 
+\subsection{Szakterület-specifikus összehasonlítás}
+
 Lin, Gray és Jouault cikke \cite{dsmdiff} azt hangsúlyozza, hogy fontos, hogy az algoritmus metamodelltõl független legyen, a cikkben ismertetett \emph{DSMDiff} tetszóleges domain-specifikus nyelven íródott modellpélányokat kíván összehasonlítani. Magáról a DSMDiff-rõl nagyon keveset sikerült kideríteni, pedig a cikk szerint ez nem csak egy terv, hanem implementálták is.
+
+\subsection{Transzformációk tesztelése és verziókezelés}
 
 Lin, Zhang és Gray cikke \cite{comparechal} problémafelvetési céllal íródott, nem tartalmaz konkrét megoldásokat. A 2004-es írásban felvetett problémák egy rész már megoldódott, mivel részben a CVS problémái voltak ezek, melyek közül számosat az SVN már ma is megold, például a projekt-szintû verziózást a fájl-szintû helyett.
 
-Ezen a héten ezen kívül a cikkek keresése mellett az is napirendre került, hogy mely már létezõ projekteket lenne érdemes kipróbálni ebben a témakörben.
+A fenti probléma-leírások és megoldás-vázlatok alapján az is napirendre került,
+hogy mely már létezõ projekteket lenne érdemes kipróbálni ebben a témakörben.
 
 A két elsõ jelölt:
 
@@ -207,32 +262,34 @@ A két elsõ jelölt:
 \item Groove \cite{groove}
 \end{itemize}
 
-Levelezés alapján a probléma sokadik megfogalmazása: az egyesítõ algoritmus jó lenne, ha nem egyetlen metamodell fölött tudna mûködni, cserébe viszont ha semmit se tudunk a metamodellrõl akkor nemnagyon lehet jól egyesíteni. Erre megoldás lehet, ha a metamodell információi is az algoritmus inputját képezik a két modellpélány mellett. Egy másik megoldás lehet, ha a metamodell információi alapján tudunk kódot generálni, és így tetszõleges metamodell számára könnyen elékészíthetõ a mûködõ algoritmus-implementáció.
+A probléma sokadik megfogalmazása tehát: az egyesítõ algoritmus jó lenne, ha nem egyetlen metamodell fölött tudna mûködni, cserébe viszont ha semmit se tudunk a metamodellrõl akkor nem nagyon lehet jól egyesíteni. Erre megoldás lehet, ha a metamodell információi is az algoritmus inputját képezik a két modellpélány mellett. Egy másik megoldás lehet, ha a metamodell információi alapján tudunk kódot generálni, és így tetszõleges metamodell számára könnyen elkészíthetõ a mûködõ algoritmus-implementáció.
 
-Ezen kívül még probléma, hogy az algoritmusnak nagy elemszámú modelleket is jól kell tudnia kezelnie, a jelenlegi megoldások nagyrésze párezer elem felett már nem végez gyakorlatben megengedhetõ idõn belül.
+Ezen kívül még probléma, hogy az algoritmusnak nagy elemszámú modelleket is jól kell tudnia kezelnie, a jelenlegi megoldások nagy része néhány ezer elem felett már nem végez gyakorlatban megengedhetõ idõn belül.
 
-\subsection{Ötödik hét}
+\subsection{X-Diff}
 
-A héten olyan gráfok összehasonlítását végzõ algoritmusokat kerestem, melyek fák (körmentes gráfok). A szakoridalom ilyen téren már kevésbe gazdag, pedig számos metamodell-csoport (például az összes EMF által kezelt) szigorú tartalmazási hierarchia szerint épül fel, tehát faként reprezentálható.
+A héten olyan gráfok összehasonlítását végzõ algoritmusokat kerestem, melyek fák (körmentes gráfok). A szakirodalom ilyen téren már kisebb mértékben gazdag, pedig számos metamodell-csoport (például az összes EMF által kezelt) szigorú tartalmazási hierarchia szerint épül fel, tehát faként reprezentálható.
 
 Az egyik legérdekesebb Wang, DeWitt és Cai cikke \cite{xdiff}, melyben az
 \emph{X-Diff} algoritmust vázolják. Az algoritmust alapötlete nagyon hasonlít a
 késõbb tárgyalt \emph{FMES} algoritmushoz, viszont ehhez nem találtam
 nyilvánosan elérhetõ mûködõ kódot.
 
-\subsection{Hatodik hét}
+\subsection{VIATRA2}
 
-A következõ lépés a VIATRA2 rendszerrel való ismerkedés volt. Mivel egy hallgató már korábban foglalkozott modell összehasonlítási témával, így elõször az ö algoritmusát \cite{karer} próbáltam ki. Ez a keretrendszerrel való ismerkedéshez kíváló feladat volt, az algoritmus viszont az én inputomra lefagyott (\emph{NullPointerException}).
+A következõ lépés a VIATRA2 rendszerrel való ismerkedés volt. Mivel egy hallgató már korábban foglalkozott modell összehasonlítási témával, így elõször az ö algoritmusát \cite{karer} próbáltam ki. Ez a keretrendszerrel való ismerkedéshez kiváló feladat volt, az algoritmus viszont az én inputomra lefagyott (\emph{NullPointerException}).
+
+Ezt követõen a VIATRA Java API-jával ismerkedtem, ennek keretében elkészült egy egyszerû (hello world) model comparator\cite{viatrahello}, ami csak összehasonlítja az egyes entitások nevét, relációinak számát, és ez alapján tekinti egyezõnek az egyes entitásokat vagy sem.
+
+\subsection{Odyssey-VCS}
 
 Ezzel párhuzamosan megpróbáltam felvenni a kapcsolatot az \emph{Odyssey-VCS}\cite{odyssey} szerzõivel, melynek célja egy modellek kezelésére kitalált EMF-alapó verziókezelõ lenne. Sajnálatos módon a szoftver elsó blikkre (out of the box) nem mûködött, a forráskódot meg többszöri levélváltás után se sikerült végül megkapni, bár határozott elutasítást nem kaptam (kutatási célokra).
 
-\subsection{Hetedik hét}
+\subsection{Változás-vezérelt összehasonlítás}
 
-A hetet a VIATRA Java API-jával való ismerkedéssel kezdtem, ennek keretében elkészült egy egyszerû (hello world) model comparator\cite{viatrahello}, ami csak összehasonlítja az egyes entitások nevét, relációinak számát, és ez alapján tekinti egyezõnek az egyes entitásokat vagy sem.
+A tanszéken született cikk \cite{changedriven} tudását végül nem használtam fel a késõbbiekben a félév során, mivel nem változás-vezérelt algoritmust implementáltam.
 
-Ezt követte egy, a tanszéken született cikk \cite{changedriven} olvasása, melynek tudását végül nem használtam fel a késõbbiekben a félév során, mivel nem változás-vezérelt algoritmust implementáltam.
-
-\subsubsection*{EMF Compare}
+\subsection{EMF Compare}
 
 Utána az EMF Compare-rel ismerkedtem. Az
 org .eclipse .emf .compare .examples .standalone csomagban van egy parancssorból
@@ -288,7 +345,7 @@ fenti 2 match típustól.
 Ha interaktív összehasonlítás a cél, akkor a hivatkozás-jegyzékben említett
 \cite{eclipseforum} bejegyzés hasznos lehet.
 
-\subsubsection*{Diff XML}
+\subsection{Diff XML}
 
 A DiffXML nevû eszközt azért tartom kiválónak a labor szempontjából, mert kiterjedt teszteset-gyûjteménnyel rendelkezik XML modellekbõl. Egy rövid kiértékelés alapján az eszköz tudja is amit hirdet magáról: XML modelleket tud összehasonlítani és foltozni (patch), a metamodell figyelembevétele nélkül.
 
@@ -311,7 +368,7 @@ Azt is megnéztem, hogy B-t hasonlítva és A-t foltozva a kapott egyesítési eredmé
 azonos az elõbbi módon kapott egyesítési eredménnyel, ami bizakodásra ad okot
 az háttérben munkálkodó algoritmust tekintve.
 
-\subsubsection*{FMES}
+\subsection{FMES}
 
 A DiffXML eszköz összehasonlító moduljában alapértelmezett esetben egy FMES
 nevû algoritmus oldja meg a tényleges összehasonlítást.
@@ -367,7 +424,7 @@ elhagyásával kapunk. Futtassuk erre iteratív módon újfent az algoritmust.
 \caption{Második iteráció: párosítás eltérõ úton}
 \end{figure}
 
-\subsection{Nyolcadik hét}
+\subsection{FMES II.}
 
 Az FMES portolása VIATRA-hoz, a párosítás rész már mûködik. A párosítás és a
 két modell alapján a következõ lépés a szerkesztési szöveg elõállítása lenne
@@ -396,7 +453,7 @@ Az implementáció\cite{fmes4viatra} két legfontosabb hiányossága, hogy nincsenek
 kezelve az áthelyezések, valamint a relációkat nem veszi figyelembe a két
 csúcsot összehasonlító függvény.
 
-\subsection{Kilencedik hét}
+\subsection{Groove}
 
 A Groove mögött dolgozó gráf-összehasonlító algoritmus leírása\cite{groovegraph} újabb ötleteket adhat a saját összehasonlító tervezésénél. A szerzõ is megjegyzi, hogy gráfok izomorfiáját alapesetben nem lehet polinomidõben vizsgálni. McKay algoritmusát használja, mely a következõt adja: egy gráfon és egy páronként nem-izomorf gráfokat tartalmazó halmazon dolgozik, és azt keresi, hogy a halmazból bármelyik elem izomorf-e a gráffal. Ha nem, akkor értelemszerûen felveszi az elemet a halmazba. Az algoritmus közelítõ ötletek segítségével polinom-idejû. Az ötletek a következõk:
 
@@ -406,7 +463,7 @@ A Groove mögött dolgozó gráf-összehasonlító algoritmus leírása\cite{groovegraph}
 \item A lenyomatot készítõ függvény a gráf színezését használja fel építõkõként.
 \end{itemize}
 
-\subsection{Tizedik hét}
+\subsection{VIATRA XML importer}
 
 Egyszerû importert készítettem a releváns dokumentáció\cite{importdoc} alapján.
 
@@ -419,7 +476,7 @@ hierarchiát figyelembe véve, ellenben az attribútumokkal már nem foglalkozik.
 
 Ez a munka az SVN-ben szintén elérhetõ\cite{xmlimportsvn}.
 
-\subsection{Tizenegyedik hét}
+\subsection{FMES III.}
 
 Az FMES-be megcsináltam az áthelyezések detektálását, aminek az alapötlete a következõ:
 
@@ -476,7 +533,7 @@ Applying: <delete name="a.f"/>
 Applying: <delete name="a.b.1"/>
 \end{verbatim}
 
-\subsection{Tizenkettedik hét}
+\subsection{FMES dokumentáció}
 
 Az FMES kód kapcsán felmerült, hogy ezt vagy azt miért úgy csináltam, és a
 válasz az volt, hogy azért, hogy a diffxml-es fmes kódtól minimálisan térjen
@@ -491,7 +548,7 @@ lehetnek, de jelenleg nem használtak", törlésre kerültek.
 
 Ezen kívül elkészítettem a labor végén esedékes prezentáció fóliáit.
 
-\subsection{Tizenharmadik hét}
+\subsection{Tesztelés}
 
 Elkészítettem a félévi munkát tükrözõ részletes dokumentációt (ezt a
 dokumentumot). E dokumentáció alapjául a félév során vezetett wiki
