@@ -345,9 +345,26 @@ fenti 2 match típustól.
 Ha interaktív összehasonlítás a cél, akkor a hivatkozás-jegyzékben említett
 \cite{eclipseforum} bejegyzés hasznos lehet.
 
+\subsection{Groove}
+
+A Groove mögött dolgozó gráf-összehasonlító algoritmus leírása\cite{groovegraph} újabb ötleteket adhat a saját összehasonlító tervezésénél. A szerzõ is megjegyzi, hogy gráfok izomorfiáját alapesetben nem lehet polinomidõben vizsgálni. McKay algoritmusát használja, mely a következõt adja: egy gráfon és egy páronként nem-izomorf gráfokat tartalmazó halmazon dolgozik, és azt keresi, hogy a halmazból bármelyik elem izomorf-e a gráffal. Ha nem, akkor értelemszerûen felveszi az elemet a halmazba. Az algoritmus közelítõ ötletek segítségével polinom-idejû. Az ötletek a következõk:
+
+\begin{itemize}
+\item A gráf redukálása (izomorfia szempontjából lényegtelen elemek eltávolítása) vizsgálat elõtt.
+\item A gráfok lenyomatának (hash) számítása, így ha a lenyomat-függvény gyors, az izomorfia konstans idõben eldönthetõ.
+\item A lenyomatot készítõ függvény a gráf színezését használja fel építõkõként.
+\end{itemize}
+
+\section{A kiválaszatott módszer: FMES}
+
 \subsection{Diff XML}
 
 A DiffXML nevû eszközt azért tartom kiválónak a labor szempontjából, mert kiterjedt teszteset-gyûjteménnyel rendelkezik XML modellekbõl. Egy rövid kiértékelés alapján az eszköz tudja is amit hirdet magáról: XML modelleket tud összehasonlítani és foltozni (patch), a metamodell figyelembevétele nélkül.
+
+Másik nagy elõnye, hogy mivel fákon dolgozik, gyorsabb, mint azon algoritmusok
+melyek tetszõleges gráfokkal képesek dolgozni. Figyelembe véve, hogy sok modell
+esetén a metamodell elõírja a szigorú tartalmazási hierarchiát (pl. EMF), ez a
+megkötés sok modellpéldány esetén nem jelent gondot.
 
 Felhasználói szemszögbõl úgy mûködik, hogy 2 XML modellt kér bemenetként és kimenetként egy olyan XML modellt ad, mely operációk listáját tartalmazza, mellyel el lehet jutni az elsõ modellbõl a másodikba. Ezt az eszköz szerkesztési szövegnek (edit script) hívja. Így tehát egy tipikus 3-utas egyesítés (3-way merge) megoldható a következõ lépésekkel:
 
@@ -424,11 +441,47 @@ elhagyásával kapunk. Futtassuk erre iteratív módon újfent az algoritmust.
 \caption{Második iteráció: párosítás eltérõ úton}
 \end{figure}
 
-\subsection{FMES II.}
+\section{Implementáció}
 
-Az FMES portolása VIATRA-hoz, a párosítás rész már mûködik. A párosítás és a
-két modell alapján a következõ lépés a szerkesztési szöveg elõállítása lenne
-Ebbõl már mûködik a beillesztõ és a törlést biztosító rész.
+Ebben a fejezetben két VIATRA plugin implementációját ismertetem: Az xml
+importert valamint az FMES összehasonlítót.
+
+Az xml importer egy VIATRA importert valósít meg. Ez egy Eclipse plugin, mely
+egyrészt az \emph{org.eclipse.viatra2.core2.modelimport} kiterjesztési pontot
+(extension point) használja, másrészt Java szinten az
+\emph{org.eclipse.viatra2.imports.NativeImporter} interfészt implementálja.
+
+A modell összehasonlító felépítése a következõ: egy általános modell
+összehasonlító Eclipse plugin használja az
+\emph{org.eclipse.viatra2.gui.contributedAction} kiterjesztési pontot, mely
+Java szinten az
+\emph{org.eclipse.viatra2.frameworkgui.actions.AbstractFrameworkGUIAction}
+osztályból öröklõdik, majd ez definiál egy saját
+\emph{org.eclipse.viatra2.model.comparator.IModelComparator} interfészt, melyet
+az egyes algoritmusoknak implementálnia kell. Ezt az interfészt valósítja meg
+az általam implementált
+\emph{org.eclipse.viatra2.model.comparator. algorithms.vmiklos. fmes.FmesModelComparator}
+is.
+
+\subsection{VIATRA XML importer}
+
+Egyszerû importert készítettem a releváns dokumentáció\cite{importdoc} alapján.
+
+A cél az volt, hogy a diffxml teszteseteit be lehessen húzni VIATRA-ba és ne
+kelljen kézzel felvenni az entitásokat, ezzel el is készültem.
+
+Egyszerû alatt azt kell érteni, hogy csak az \emph{entity} meg \emph{text}
+típusú csomópontokat figyeli és az alapján IEntity-ket hoz létre a tartalmazási
+hierarchiát figyelembe véve, ellenben az attribútumokkal már nem foglalkozik.
+
+Ez a munka az SVN-ben szintén elérhetõ\cite{xmlimportsvn}.
+
+\subsection{FMES illesztése VIATRA-hoz}
+
+Az FMES VIATRA-hoz illesztése (portolása) során az elsõ lépés a a párosítás
+implementálása volt. A párosítás és a két modell alapján a következõ lépés a
+szerkesztési szöveg elõállítása lesz. Ebbõl elõször a beillesztõ és a
+törlést biztosító részt készítettem el.
 
 Egy egyszerû modellre a kimenet a következõ:
 
@@ -449,36 +502,12 @@ Applying: <insert name="X" parent="a"/>
 Applying: <delete node="a.x"/>
 \end{verbatim}
 
-Az implementáció\cite{fmes4viatra} két legfontosabb hiányossága, hogy nincsenek
-kezelve az áthelyezések, valamint a relációkat nem veszi figyelembe a két
-csúcsot összehasonlító függvény.
+Az implementáció\cite{fmes4viatra} ezen állapotában a két legfontosabb
+hiányosság, hogy nincsenek kezelve az áthelyezések, valamint a relációkat nem
+veszi figyelembe a két csúcsot összehasonlító függvény.
 
-\subsection{Groove}
-
-A Groove mögött dolgozó gráf-összehasonlító algoritmus leírása\cite{groovegraph} újabb ötleteket adhat a saját összehasonlító tervezésénél. A szerzõ is megjegyzi, hogy gráfok izomorfiáját alapesetben nem lehet polinomidõben vizsgálni. McKay algoritmusát használja, mely a következõt adja: egy gráfon és egy páronként nem-izomorf gráfokat tartalmazó halmazon dolgozik, és azt keresi, hogy a halmazból bármelyik elem izomorf-e a gráffal. Ha nem, akkor értelemszerûen felveszi az elemet a halmazba. Az algoritmus közelítõ ötletek segítségével polinom-idejû. Az ötletek a következõk:
-
-\begin{itemize}
-\item A gráf redukálása (izomorfia szempontjából lényegtelen elemek eltávolítása) vizsgálat elõtt.
-\item A gráfok lenyomatának (hash) számítása, így ha a lenyomat-függvény gyors, az izomorfia konstans idõben eldönthetõ.
-\item A lenyomatot készítõ függvény a gráf színezését használja fel építõkõként.
-\end{itemize}
-
-\subsection{VIATRA XML importer}
-
-Egyszerû importert készítettem a releváns dokumentáció\cite{importdoc} alapján.
-
-A cél az volt, hogy a diffxml teszteseteit be lehessen húzni VIATRA-ba és ne
-kelljen kézzel felvenni az entitásokat, ezzel el is készültem.
-
-Egyszerû alatt azt kell érteni, hogy csak az \emph{entity} meg \emph{text}
-típusú csomópontokat figyeli és az alapján IEntity-ket hoz létre a tartalmazási
-hierarchiát figyelembe véve, ellenben az attribútumokkal már nem foglalkozik.
-
-Ez a munka az SVN-ben szintén elérhetõ\cite{xmlimportsvn}.
-
-\subsection{FMES III.}
-
-Az FMES-be megcsináltam az áthelyezések detektálását, aminek az alapötlete a következõ:
+Tekintsük át tehát, hogyan oldható meg az áthelyezések detektálása, és ennek mi
+az alapötlete:
 
 \begin{itemize}
 \item Ha van egy ModelElement ami már párosított (tehát van megfelelõje a másik modellben), de
@@ -494,8 +523,6 @@ Ezen kívül teszteseteket készítettem három tesztesetet:
 \item Áthelyezés-detektálást igénylõ esetet
 \item Kombináltat
 \end{itemize}
-
-A tesztelés módja a következõ: Az XML modelleket rá kell húzni a modelltérre (ehhez szükséges az elõzõ alfejezetben leírt XML importer) és a fájlnévbõl a kiterjesztés elhagyásával képzett névvel ellátott, legfelsõ szintû elem alá kerül létrehozásra a modell VIATRA-s reprezentációja. Ha ezt legalább két modellre megtettük, akkor futtatható a modell összehasonlító úgy, hogy a modelltéren jobb gombbal kattintunk, majd kiválasztjuk a \emph{Contributions} majd \emph{Run model comparator} menüpontokat. Az ekkor megjelenõ ablakban pontosan két modellt kell kiválasztani, majd az OK gombra kattintva indítható az összehasonlítás.
 
 Kimenet a kombinált esetre:
 
@@ -533,7 +560,7 @@ Applying: <delete name="a.f"/>
 Applying: <delete name="a.b.1"/>
 \end{verbatim}
 
-\subsection{FMES dokumentáció}
+\subsection{Dokumentáció}
 
 Az FMES kód kapcsán felmerült, hogy ezt vagy azt miért úgy csináltam, és a
 válasz az volt, hogy azért, hogy a diffxml-es fmes kódtól minimálisan térjen
@@ -548,17 +575,38 @@ lehetnek, de jelenleg nem használtak", törlésre kerültek.
 
 Ezen kívül elkészítettem a labor végén esedékes prezentáció fóliáit.
 
-\subsection{Tesztelés}
+\section{Tesztelés}
 
-Elkészítettem a félévi munkát tükrözõ részletes dokumentációt (ezt a
-dokumentumot). E dokumentáció alapjául a félév során vezetett wiki
-oldalak\cite{wikireadme} \cite{wikilog} szolgáltak. A dokumentáció tördelése a
-a tanszék által küldött fedlap alapján a \TeX{} 3.141592 verziójával készült,
-Frugalware Linux operációs rendszeren. A munkához az Eclipse 3.5-ös (Galileo)
-verzióját használtam, míg a VIATRA rendszert SVN-bõl, a r1353-at. Erre (és nem
-egy stabil kiadás használatára) azért volt szükség, mert a félév elején még nem
-volt elérhetõ a VIATRA 3.1-es kiadása, az elõzõ kiadás pedig már kifejezetten
-õsinek számított, a konzulens se javasolta a használatát.
+A tesztelés módja a következõ: Az XML modelleket rá kell húzni a modelltérre
+(ehhez szükséges a korábban leírt XML importer) és a fájlnévbõl a kiterjesztés
+elhagyásával képzett névvel ellátott, legfelsõ szintû elem alá kerül
+létrehozásra a modell VIATRA-s reprezentációja. Ha ezt legalább két modellre
+megtettük, akkor futtatható a modell összehasonlító úgy, hogy a modelltéren
+jobb gombbal kattintunk, majd kiválasztjuk a \emph{Contributions} majd
+\emph{Run model comparator} menüpontokat. Az ekkor megjelenõ ablakban pontosan
+két modellt kell kiválasztani, majd az OK gombra kattintva indítható az
+összehasonlítás.
+
+A korábban leírt egyszerû teszt bemeneteken kívül egyéb tesztelést nem
+végeztem, összetettebb méréseket végezni véleményem szerint majd akkor lenne
+érdemes ha funkcionalitás szempontjából az algoritmus már teljes: amíg a
+metamodell kezelése nem készül el, valamint a relációkat nem vesszük figyelembe
+elvérható mértékben addig úgy gondolom nincs értelme részletes diagramokat
+készíteni arról, hogy pontosan mennyi idõt igényel adott modelleknek az
+összehasonlítása. A fejlesztés során használt kis bemenetekre a futási idõ
+elhanyagolható (kevesebb, mint 1 másodperc) volt.
+
+A félév során a tesztelés és dokumentáció készítés céljára használt környezet a
+következõ volt:
+
+E dokumentáció alapjául a félév során vezetett wiki oldalak\cite{wikireadme}
+\cite{wikilog} szolgáltak. A dokumentáció tördelése a a tanszék által küldött
+fedlap alapján a \TeX{} 3.141592 verziójával készült, Frugalware Linux
+operációs rendszeren. A munkához az Eclipse 3.5-ös (Galileo) verzióját
+használtam, míg a VIATRA rendszert SVN-bõl, a r1353-at. Erre (és nem egy stabil
+kiadás használatára) azért volt szükség, mert a félév elején még nem volt
+elérhetõ a VIATRA 3.1-es kiadása, az elõzõ kiadás pedig már kifejezetten õsinek
+számított, a konzulens se javasolta a használatát.
 
 A VIATRA rendszer fejlesztését Eclipse-bõl futtatott Eclipse-ben teszteltem (runtime Eclipse), mely a következõ alap VIATRA projekteket tartalmazta:
 
