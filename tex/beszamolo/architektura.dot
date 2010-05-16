@@ -1,0 +1,22 @@
+digraph {
+//ratio=1.41
+//ratio=0.56
+rankdir=BT
+eclipse [label="Eclipse"]
+extensionPointImport [label="org.eclipse.viatra2.\ncore2.nmodelimport"]
+eclipse->extensionPointImport [label="<<provides>>",arrowhead="none"]
+interfaceImport [label="org.eclipse.viatra2.\nimports.NativeImporter"]
+importer [label="org.eclipse.viatra2.\nimports.vmiklos.xmlimporter.\nimpl.XmlImporter"]
+extensionPointImport->importer [label="<<uses>>",arrowhead="none"]
+interfaceImport->importer [label="<<implements>>",arrowhead="none"]
+extensionPointCompare [label="org.eclipse.viatra2.\ngui.contributedAction"]
+eclipse->extensionPointCompare [label="<<provides>>",arrowhead="none"]
+extendsCompare [label="org.eclipse.viatra2.\nframeworkgui.actions.\nAbstractFrameworkGUIAction"]
+comparator [label="org.eclipse.viatra2.\nmodel.comparator.\nModelComparatorAction"]
+extensionPointCompare->comparator [label="<<uses>>",arrowhead="none"]
+extendsCompare->comparator [label="<<extends>>",arrowhead="none"]
+interfaceComparator [label="org.eclipse.viatra2.\nmodel.comparator.\nIModelComparator"]
+comparator->interfaceComparator [label="<<contains>>",arrowhead="none"]
+comparatorAlgo [label="org.eclipse.viatra2.\nmodel.comparator.algorithms.\nvmiklos.fmes.\nFmesModelComparator"]
+interfaceComparator->comparatorAlgo [label="<<implements>>",arrowhead="none"]
+}
