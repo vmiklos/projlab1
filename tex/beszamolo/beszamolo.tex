@@ -166,6 +166,10 @@ Szoftver & Állapot & Rövid leírás \\ \hline
 \end{table}
 \end{center}
 
+A fejezet további részében tehát ezeknek a munkáknak a részletes ismertetése
+következik, két részre csoportosítva: az egyes cikkek részletezését követõen az
+utolsó négy alfejezet konkrét szoftverekkel foglalkozik.
+
 \subsection{Ericsson}
 
 Az Ericsson egy ipari esettanulmányából \cite{ericsson} kiderül, hogy miért is
@@ -266,9 +270,13 @@ A probléma sokadik megfogalmazása tehát: az egyesítõ algoritmus jó lenne, ha nem
 
 Ezen kívül még probléma, hogy az algoritmusnak nagy elemszámú modelleket is jól kell tudnia kezelnie, a jelenlegi megoldások nagy része néhány ezer elem felett már nem végez gyakorlatban megengedhetõ idõn belül.
 
+\subsection{Változás-vezérelt összehasonlítás}
+
+A tanszéken született cikk \cite{changedriven} tudását végül nem használtam fel a késõbbiekben a félév során, mivel nem változás-vezérelt algoritmust implementáltam.
+
 \subsection{X-Diff}
 
-A héten olyan gráfok összehasonlítását végzõ algoritmusokat kerestem, melyek fák (körmentes gráfok). A szakirodalom ilyen téren már kisebb mértékben gazdag, pedig számos metamodell-csoport (például az összes EMF által kezelt) szigorú tartalmazási hierarchia szerint épül fel, tehát faként reprezentálható.
+Olyan gráfok összehasonlítását végzõ algoritmusokat kerestem, melyek fák (körmentes gráfok). A szakirodalom ilyen téren már kisebb mértékben gazdag, pedig számos metamodell-csoport (például az összes EMF által kezelt) szigorú tartalmazási hierarchia szerint épül fel, tehát faként reprezentálható.
 
 Az egyik legérdekesebb Wang, DeWitt és Cai cikke \cite{xdiff}, melyben az
 \emph{X-Diff} algoritmust vázolják. Az algoritmust alapötlete nagyon hasonlít a
@@ -284,10 +292,6 @@ Ezt követõen a VIATRA Java API-jával ismerkedtem, ennek keretében elkészült egy 
 \subsection{Odyssey-VCS}
 
 Ezzel párhuzamosan megpróbáltam felvenni a kapcsolatot az \emph{Odyssey-VCS}\cite{odyssey} szerzõivel, melynek célja egy modellek kezelésére kitalált EMF-alapó verziókezelõ lenne. Sajnálatos módon a szoftver elsó blikkre (out of the box) nem mûködött, a forráskódot meg többszöri levélváltás után se sikerült végül megkapni, bár határozott elutasítást nem kaptam (kutatási célokra).
-
-\subsection{Változás-vezérelt összehasonlítás}
-
-A tanszéken született cikk \cite{changedriven} tudását végül nem használtam fel a késõbbiekben a félév során, mivel nem változás-vezérelt algoritmust implementáltam.
 
 \subsection{EMF Compare}
 
